@@ -1,0 +1,1281 @@
+/* =========================================================
+   TEMPLATE PRESENTASI INTERAKTIF — BOARD GAME x BILLIARD TABLE
+   File: style.css
+   Struktur warna & tipografi didefinisikan sebagai CSS variables
+   di :root agar mudah dipakai ulang untuk mapel/topik lain.
+   ========================================================= */
+
+:root{
+  /* ---------- Palet warna ---------- */
+  --green-deepest: #06231a;
+  --green-deep:    #0b3a2c;
+  --green-felt:    #123f30;
+  --green-highlight: #1c5942;
+  --cream:         #f2e8d3;
+  --cream-dim:     #d9caa4;
+  --gold:          #c6a15a;
+  --gold-bright:   #e8caa0;
+  --gold-dark:     #8a6a2f;
+  --brown:         #3a2a1a;
+  --brown-dark:    #201509;
+  --ink:           #241a10;
+  --shadow-strong: rgba(0,0,0,0.62);
+  --shadow-soft:   rgba(0,0,0,0.32);
+
+  /* ---------- Tipografi ---------- */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-label:   'Oswald', 'Arial Narrow', sans-serif;
+  --font-body:    'Inter', -apple-system, 'Segoe UI', sans-serif;
+
+  /* ---------- Skala fluid berbasis viewport ---------- */
+  --board-size: min(84vh, 78vw, 1180px);
+  --tile-thick: clamp(3px, 0.35vmin, 6px);
+  --panel-pad: clamp(20px, 2.6vmin, 46px);
+  --dice-size: clamp(58px, 8vmin, 112px);
+  --btn-h: clamp(56px, 8vmin, 92px);
+  --num-size: clamp(9px, 1.05vmin, 15px);
+  --icon-size: clamp(34px, 4.4vmin, 56px);
+
+  --transition-slide: 550ms cubic-bezier(.22,.75,.28,1);
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--green-deepest);
+  font-family: var(--font-body);
+  color: var(--cream);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+button{
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* =========================================================
+   1. STAGE & MEJA BILLIARD (BACKGROUND)
+   ========================================================= */
+
+.stage{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1900px;
+  perspective-origin: 50% 42%;
+}
+
+.table-surface{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 38%, var(--green-highlight) 0%, var(--green-felt) 38%, var(--green-deep) 68%, var(--green-deepest) 100%);
+}
+
+.felt-texture{
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(25deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode: overlay;
+}
+
+.felt-noise{
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  mix-blend-mode: overlay;
+}
+
+.ambient-glow{
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(232,202,160,0.10) 0%, rgba(232,202,160,0.0) 45%);
+  animation: ambientBreathe 9s ease-in-out infinite;
+}
+
+.table-vignette{
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 22vmin 4vmin rgba(0,0,0,0.65);
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%);
+}
+
+@keyframes ambientBreathe{
+  0%, 100%{ opacity: 0.7; }
+  50%{ opacity: 1; }
+}
+
+/* =========================================================
+   2. CAMERA RIG (idle float + roll shake/zoom)
+   ========================================================= */
+
+.camera-rig{
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+  animation: idleFloat 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Idle drift halus: pergeseran horizontal/vertikal beberapa px +
+   rotasi sepersekian derajat, di atas tilt kamera yang sudah ada.
+   Berhenti otomatis saat .is-rolling aktif (animation: none di
+   bawah), lalu kembali smooth begitu class itu dilepas. */
+@keyframes idleFloat{
+  0%{   transform: rotateX(2deg) translateY(0px)   translateX(0px) rotateZ(0deg); }
+  25%{  transform: rotateX(1.7deg) translateY(-2px) translateX(4px) rotateZ(0.18deg); }
+  50%{  transform: rotateX(1.4deg) translateY(-4px) translateX(-3px) rotateZ(-0.22deg); }
+  75%{  transform: rotateX(1.7deg) translateY(-2px) translateX(-5px) rotateZ(0.15deg); }
+  100%{ transform: rotateX(2deg) translateY(0px)   translateX(0px) rotateZ(0deg); }
+}
+
+.camera-rig.is-rolling{
+  animation: none;
+  transform: rotateX(3.2deg) translateY(-2px) scale(1.012);
+  transition: transform 260ms ease-out;
+}
+
+.camera-rig.is-shaking{
+  animation: cameraShake 420ms ease-in-out;
+}
+
+@keyframes cameraShake{
+  0%{ transform: rotateX(2deg) translateY(0) rotateZ(0deg) scale(1.012); }
+  20%{ transform: rotateX(2.6deg) translateY(-3px) rotateZ(-0.4deg) scale(1.018); }
+  45%{ transform: rotateX(1.6deg) translateY(2px) rotateZ(0.35deg) scale(1.02); }
+  70%{ transform: rotateX(2.4deg) translateY(-1px) rotateZ(-0.2deg) scale(1.014); }
+  100%{ transform: rotateX(2deg) translateY(0) rotateZ(0deg) scale(1.012); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .camera-rig, .camera-rig.is-shaking, .ambient-glow{ animation: none !important; }
+}
+
+/* =========================================================
+   3. BOARD
+   ========================================================= */
+
+.board{
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  transform-style: preserve-3d;
+  transform: rotateX(30deg);
+  filter: drop-shadow(0 3.5vmin 3vmin rgba(0,0,0,0.55));
+}
+
+.board-frame{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(135deg, rgba(198,161,90,0.055) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 2px, transparent 2px 11px),
+    linear-gradient(155deg, #2c1f12 0%, var(--brown) 45%, var(--brown-dark) 100%);
+  border-radius: clamp(10px, 1vmin, 20px);
+  padding: clamp(10px, 1.4vmin, 22px);
+  box-shadow:
+    0 0 0 1px rgba(198,161,90,0.35),
+    inset 0 0 0 2px rgba(0,0,0,0.4),
+    0 2vmin 3vmin rgba(0,0,0,0.5);
+}
+
+.board-trim{
+  position: absolute;
+  inset: clamp(4px, 0.6vmin, 10px);
+  border-radius: clamp(8px, 0.8vmin, 16px);
+  pointer-events: none;
+  border: 2px solid var(--gold);
+  opacity: 0.55;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.5),
+    0 0 8px rgba(198,161,90,0.25);
+}
+
+/* ---- Pelindung sudut (corner protector) — bagian dari board fisik ---- */
+.corner-ornament{
+  position: absolute;
+  width: clamp(20px, 2.6vmin, 40px);
+  height: clamp(20px, 2.6vmin, 40px);
+  z-index: 2;
+  pointer-events: none;
+}
+.corner-ornament::before,
+.corner-ornament::after{
+  content: '';
+  position: absolute;
+  background: linear-gradient(160deg, var(--gold-bright), var(--gold) 50%, var(--gold-dark));
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.25);
+  border-radius: 2px;
+}
+.corner-ornament::before{ width: 100%; height: 22%; top: 0; left: 0; }
+.corner-ornament::after{ width: 22%; height: 100%; top: 0; left: 0; }
+.corner-ornament.corner-tl{ top: clamp(4px, 0.6vmin, 8px); left: clamp(4px, 0.6vmin, 8px); }
+.corner-ornament.corner-tr{ top: clamp(4px, 0.6vmin, 8px); right: clamp(4px, 0.6vmin, 8px); transform: scaleX(-1); }
+.corner-ornament.corner-bl{ bottom: clamp(4px, 0.6vmin, 8px); left: clamp(4px, 0.6vmin, 8px); transform: scaleY(-1); }
+.corner-ornament.corner-br{ bottom: clamp(4px, 0.6vmin, 8px); right: clamp(4px, 0.6vmin, 8px); transform: scale(-1,-1); }
+
+/* ---- Plakat status kecil, seperti lempengan terpasang di sudut board ---- */
+.board-status{
+  position: absolute;
+  top: clamp(-16px, -1.8vmin, -8px);
+  left: 9%;
+  z-index: 6;
+  background: linear-gradient(160deg, #2c1f12, var(--brown-dark));
+  border: 1px solid rgba(198,161,90,0.55);
+  border-radius: 4px;
+  padding: 0.32em 0.75em;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.board-status-label{
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: clamp(7px, 0.75vmin, 10px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  opacity: 0.85;
+}
+.board-status-value{
+  margin: 0.15em 0 0;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: clamp(10px, 1.15vmin, 14px);
+  color: var(--cream);
+  letter-spacing: 0.06em;
+}
+.board-status-tile{
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(7px, 0.75vmin, 10px);
+  color: var(--cream-dim);
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 900px){
+  .board-status{ display: none; }
+}
+
+.tiles-layer{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(11, 1fr);
+  gap: clamp(2px, 0.3vmin, 5px);
+  background: radial-gradient(ellipse at 50% 45%, var(--green-highlight) 0%, var(--green-felt) 55%, var(--green-deep) 100%);
+  border-radius: clamp(6px, 0.6vmin, 12px);
+  box-shadow: inset 0 0 3vmin 1vmin rgba(0,0,0,0.55);
+  padding: clamp(2px, 0.3vmin, 5px);
+}
+
+/* ---- Petak ---- */
+.tile{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  background: linear-gradient(160deg, var(--cream) 0%, var(--cream-dim) 100%);
+  border-radius: clamp(2px, 0.25vmin, 5px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 3px rgba(0,0,0,0.25) inset,
+    0 1px 2px rgba(0,0,0,0.4);
+}
+
+.tile-icon{
+  width: 42%;
+  aspect-ratio: 1;
+  color: var(--brown);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+.tile-icon svg{
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Variasi warna halus antar petak dekoratif agar tiap petak terasa unik
+   walau memakai simbol yang sama pada pool ikon */
+.tile-icon.variant-1{ filter: hue-rotate(10deg); }
+.tile-icon.variant-2{ filter: hue-rotate(-10deg) brightness(0.94); }
+.tile-icon.variant-3{ opacity: 0.62; }
+
+.tile-number{
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--num-size);
+  letter-spacing: 0.02em;
+  color: var(--brown);
+  opacity: 0.85;
+}
+
+.tile.corner{
+  background: linear-gradient(160deg, var(--gold-bright) 0%, var(--gold) 55%, var(--gold-dark) 100%);
+  z-index: 2;
+  transform: scale(1.16);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 3px rgba(0,0,0,0.25) inset,
+    0 3px 6px rgba(0,0,0,0.5);
+}
+.tile.corner .tile-icon{
+  width: 52%;
+  color: var(--brown-dark);
+  opacity: 0.85;
+}
+.tile.corner .tile-number{
+  color: var(--brown-dark);
+  font-size: calc(var(--num-size) * 1.35);
+}
+
+.tile.start{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+}
+.tile.start .tile-icon{
+  width: 36%;
+  color: var(--brown-dark);
+  opacity: 0.75;
+}
+
+.tile-start-label{
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: clamp(9px, 1.15vmin, 15px);
+  letter-spacing: 0.1em;
+  color: var(--brown-dark);
+}
+
+.tile.is-active-target{
+  box-shadow:
+    0 0 0 2px var(--gold-bright),
+    0 0 1.4vmin 0.4vmin rgba(232,202,160,0.55);
+}
+
+/* ---- Petak slide / milestone: lebih menonjol dari petak dekorasi ---- */
+.tile.milestone{
+  background: linear-gradient(160deg, #fbf3df 0%, var(--cream) 55%, var(--cream-dim) 100%);
+  box-shadow:
+    0 0 0 2px var(--gold-bright),
+    0 0 1.1vmin 0.3vmin rgba(232,202,160,0.4),
+    0 1px 2px rgba(0,0,0,0.4);
+}
+.tile.milestone .tile-icon{
+  width: 54%;
+  color: var(--gold-dark);
+  opacity: 0.95;
+  filter: drop-shadow(0 0 3px rgba(198,161,90,0.55));
+}
+.tile.milestone .tile-number{
+  color: var(--gold-dark);
+  font-weight: 700;
+  opacity: 1;
+}
+
+.tile.finish-tile{
+  background: linear-gradient(160deg, #f4e6c4 0%, var(--gold) 60%, var(--gold-dark) 100%);
+}
+.tile.finish-tile .tile-icon{ color: var(--brown-dark); }
+.tile.finish-tile .tile-number{ color: var(--brown-dark); }
+
+/* =========================================================
+   4. PION — miniatur pion board-game (HTML/CSS berlapis)
+   ========================================================= */
+
+.pion{
+  position: absolute;
+  width: clamp(18px, 2.9vmin, 32px);
+  height: clamp(24px, 3.8vmin, 42px);
+  left: 4.5%;
+  top: 95.5%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  transition: left var(--hop-duration, 260ms) ease, top var(--hop-duration, 260ms) ease;
+  pointer-events: none;
+}
+
+.pion-shadow{
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: 84%;
+  height: 22%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 72%);
+  border-radius: 50%;
+}
+
+.pawn-figure{
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.pawn-base{
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 96%;
+  height: 20%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 30%, var(--gold-bright), var(--gold) 55%, var(--gold-dark));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 3px rgba(0,0,0,0.4) inset,
+    0 2px 3px rgba(0,0,0,0.5);
+}
+
+.pawn-stem{
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  width: 24%;
+  height: 24%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+  border-radius: 2px 2px 0 0;
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,0.25),
+    inset -1px 0 0 rgba(0,0,0,0.3);
+}
+
+.pawn-collar{
+  position: absolute;
+  left: 50%;
+  bottom: 32%;
+  width: 60%;
+  height: 10%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--gold-bright), var(--gold-dark));
+  box-shadow: 0 1px 2px rgba(0,0,0,0.45);
+}
+
+.pawn-body{
+  position: absolute;
+  left: 50%;
+  bottom: 38%;
+  width: 54%;
+  height: 40%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 40% 40% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 32% 26%, var(--gold-bright) 0%, var(--gold) 48%, var(--gold-dark) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.45) inset,
+    0 -3px 4px rgba(0,0,0,0.35) inset,
+    0 2px 4px rgba(0,0,0,0.5);
+}
+
+.pawn-head{
+  position: absolute;
+  left: 50%;
+  top: 1%;
+  width: 48%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, var(--gold-bright) 0%, var(--gold) 45%, var(--gold-dark) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 3px rgba(0,0,0,0.4) inset,
+    0 2px 3px rgba(0,0,0,0.55);
+}
+
+.pawn-shine{
+  position: absolute;
+  left: 29%;
+  top: 7%;
+  width: 15%;
+  height: 11%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  transform: rotate(-20deg);
+}
+
+.pion.hop .pawn-figure{
+  animation: pawnHop 260ms ease-out;
+}
+@keyframes pawnHop{
+  0%{ transform: translateY(0) rotate(0deg) scale(1,1); }
+  40%{ transform: translateY(-22%) rotate(6deg) scale(1.05, 0.95); }
+  100%{ transform: translateY(0) rotate(0deg) scale(1,1); }
+}
+
+.pion.landing .pawn-figure{
+  animation: pawnLand 340ms ease-out;
+}
+@keyframes pawnLand{
+  0%{ transform: scale(1.18, 0.8); }
+  55%{ transform: scale(0.9, 1.12); }
+  100%{ transform: scale(1,1); }
+}
+
+/* =========================================================
+   5. CENTER PANEL (KONTEN PRESENTASI)
+   ========================================================= */
+
+.center-panel{
+  position: absolute;
+  inset: 18.2%;
+  z-index: 3;
+  border-radius: clamp(8px, 1vmin, 18px);
+  transform: translateZ(2vmin);
+}
+
+.panel-frame{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: clamp(3px, 0.5vmin, 8px);
+  border-radius: inherit;
+  background: linear-gradient(155deg, var(--gold-bright), var(--gold) 45%, var(--gold-dark));
+  box-shadow:
+    0 1.6vmin 2.4vmin rgba(0,0,0,0.55),
+    0 0 0 1px rgba(0,0,0,0.3);
+}
+
+.panel-inner{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(clamp(8px, 1vmin, 18px) - 3px);
+  background:
+    linear-gradient(170deg, #fbf6ea 0%, var(--cream) 55%, var(--cream-dim) 100%);
+  box-shadow: inset 0 0 0 1px rgba(58,42,26,0.15);
+  padding: var(--panel-pad);
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+}
+
+/* ---- Cover state ---- */
+.cover-view{
+  margin: auto;
+  text-align: center;
+  max-width: 78%;
+  animation: panelFadeIn var(--transition-slide);
+}
+
+.cover-eyebrow{
+  font-family: var(--font-label);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-size: clamp(10px, 1.15vmin, 15px);
+  color: var(--gold-dark);
+  margin: 0 0 0.6em;
+}
+
+.cover-title{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(22px, 4vmin, 52px);
+  line-height: 1.15;
+  margin: 0;
+  color: var(--ink);
+}
+
+.cover-divider{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vmin, 16px);
+  margin: clamp(12px, 1.6vmin, 24px) 0;
+}
+.cover-divider span{
+  width: clamp(30px, 5vmin, 90px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark));
+}
+.cover-divider span:last-child{ background: linear-gradient(90deg, var(--gold-dark), transparent); }
+.divider-gem{
+  width: clamp(7px, 0.9vmin, 12px);
+  height: clamp(7px, 0.9vmin, 12px);
+  background: var(--gold-dark);
+  transform: rotate(45deg);
+  display: inline-block;
+}
+
+.cover-group{
+  font-family: var(--font-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: clamp(13px, 1.6vmin, 20px);
+  color: var(--brown);
+  margin: 0 0 clamp(10px, 1.4vmin, 18px);
+}
+
+.cover-members{
+  list-style: none;
+  margin: 0 0 clamp(16px, 2vmin, 26px);
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(6px, 1vmin, 14px);
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.25vmin, 16px);
+}
+.cover-members li{
+  padding: 0.35em 0.9em;
+  border: 1px solid var(--gold-dark);
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+.cover-hint{
+  font-family: var(--font-body);
+  font-size: clamp(10px, 1.1vmin, 14px);
+  opacity: 0.6;
+  margin: 0;
+}
+.cover-hint b{ color: var(--gold-dark); }
+
+/* ---- Slide state ---- */
+.slide-view{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: panelFadeIn var(--transition-slide);
+}
+
+@keyframes panelFadeIn{
+  0%{ opacity: 0; transform: translateY(10px) scale(0.985); }
+  100%{ opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.slide-header{
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vmin, 20px);
+  padding-bottom: clamp(10px, 1.4vmin, 18px);
+  margin-bottom: clamp(12px, 1.6vmin, 22px);
+  border-bottom: 1px solid rgba(58,42,26,0.18);
+  flex-shrink: 0;
+}
+
+.slide-icon{
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, var(--gold-dark));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 3px rgba(0,0,0,0.35) inset,
+    0 2px 4px rgba(0,0,0,0.35);
+}
+.slide-icon svg{
+  width: 56%;
+  height: 56%;
+  color: var(--brown-dark);
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.slide-heading{ flex: 1; min-width: 0; }
+
+.slide-subtitle{
+  font-family: var(--font-label);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: clamp(9px, 1vmin, 13px);
+  color: var(--gold-dark);
+  margin: 0 0 0.25em;
+}
+
+.slide-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(17px, 2.5vmin, 32px);
+  line-height: 1.2;
+  margin: 0;
+  color: var(--ink);
+}
+
+.slide-tag{
+  font-family: var(--font-label);
+  font-size: clamp(10px, 1vmin, 13px);
+  color: var(--brown);
+  opacity: 0.55;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.slide-body{
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  font-size: clamp(12px, 1.5vmin, 18px);
+  line-height: 1.55;
+}
+.slide-body::-webkit-scrollbar{ width: 6px; }
+.slide-body::-webkit-scrollbar-thumb{ background: rgba(58,42,26,0.25); border-radius: 3px; }
+
+.slide-body p{ margin: 0 0 0.8em; }
+
+.content-bullets{
+  list-style: none;
+  margin: 0.6em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.content-bullets li{
+  position: relative;
+  padding-left: 1.5em;
+}
+.content-bullets li::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 7px;
+  height: 7px;
+  background: var(--gold-dark);
+  transform: rotate(45deg);
+}
+
+/* ---- Two-column / comparison ---- */
+.content-columns{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.8vmin, 26px);
+  height: 100%;
+  align-content: start;
+}
+.col-block{
+  background: rgba(58,42,26,0.05);
+  border: 1px solid rgba(58,42,26,0.16);
+  border-radius: 10px;
+  padding: clamp(12px, 1.6vmin, 20px);
+}
+.col-block h3{
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(12px, 1.35vmin, 17px);
+  margin: 0 0 0.5em;
+  color: var(--gold-dark);
+}
+.col-block p{ margin: 0; }
+.col-block.col-right{ border-color: rgba(58,42,26,0.16); }
+
+.content-comparison .col-block{ display: flex; flex-direction: column; gap: 0.6em; }
+.content-comparison ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5em; }
+.content-comparison li{ position: relative; padding-left: 1.4em; }
+.content-comparison li::before{
+  content: '';
+  position: absolute; left: 0; top: 0.5em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-dark);
+}
+
+/* ---- Process ---- */
+.content-process{
+  display: flex;
+  align-items: stretch;
+  gap: clamp(6px, 1vmin, 14px);
+  flex-wrap: wrap;
+}
+.process-step{
+  flex: 1 1 0;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5em;
+  padding: clamp(10px, 1.4vmin, 18px) clamp(6px, 1vmin, 12px);
+  background: rgba(58,42,26,0.05);
+  border: 1px solid rgba(58,42,26,0.16);
+  border-radius: 10px;
+  position: relative;
+}
+.process-step .step-index{
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: clamp(11px, 1.2vmin, 15px);
+  color: var(--cream);
+  background: var(--gold-dark);
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.process-step .step-label{ font-size: clamp(11px, 1.25vmin, 15px); font-weight: 500; }
+.process-step:not(:last-child)::after{
+  content: '';
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  width: 12%;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--gold-dark) 0 4px, transparent 4px 8px);
+}
+
+/* ---- Quiz ---- */
+.content-quiz .quiz-question{
+  font-weight: 600;
+  margin: 0 0 0.8em;
+  font-size: clamp(13px, 1.6vmin, 19px);
+}
+.quiz-options{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+}
+.quiz-option{
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.7em 1em;
+  border: 1px solid rgba(58,42,26,0.28);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.4);
+  font-family: var(--font-body);
+  font-size: clamp(11.5px, 1.35vmin, 16px);
+  color: var(--ink);
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+.quiz-option:hover{ background: rgba(198,161,90,0.16); }
+.quiz-option:active{ transform: scale(0.99); }
+.quiz-option.correct{
+  background: rgba(76,140,90,0.22);
+  border-color: #4c8c5a;
+}
+.quiz-option.wrong{
+  background: rgba(178,72,58,0.18);
+  border-color: #b2483a;
+}
+.quiz-feedback{
+  margin-top: 0.8em;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  background: rgba(58,42,26,0.06);
+  font-size: clamp(11px, 1.25vmin, 15px);
+  animation: panelFadeIn 280ms ease;
+}
+
+/* ---- Finish state ---- */
+.finish-view{
+  margin: auto;
+  text-align: center;
+  max-width: 70%;
+}
+.finish-icon{ margin: 0 auto clamp(10px, 1.4vmin, 18px); }
+.finish-title{ font-size: clamp(20px, 3.4vmin, 44px); }
+.finish-text{
+  margin: clamp(6px, 1vmin, 12px) 0 clamp(18px, 2.4vmin, 30px);
+  opacity: 0.75;
+}
+.restart-btn{
+  font-family: var(--font-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: clamp(11px, 1.2vmin, 15px);
+  padding: 0.8em 1.8em;
+  border-radius: 999px;
+  border: 1px solid var(--gold-dark);
+  background: transparent;
+  color: var(--gold-dark);
+  transition: background 160ms ease, color 160ms ease;
+}
+.restart-btn:hover{ background: var(--gold-dark); color: var(--cream); }
+
+/* =========================================================
+   6. DICE DOCK
+   ========================================================= */
+
+.dice-dock{
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.2vmin, 16px);
+  margin-top: clamp(10px, 1.8vmin, 22px);
+}
+
+.progress-track{
+  display: flex;
+  gap: clamp(5px, 0.7vmin, 10px);
+}
+.progress-dot{
+  width: clamp(5px, 0.7vmin, 9px);
+  height: clamp(5px, 0.7vmin, 9px);
+  border-radius: 50%;
+  background: rgba(242,232,211,0.25);
+  transition: background 200ms ease, transform 200ms ease;
+}
+.progress-dot.filled{ background: var(--gold); }
+.progress-dot.current{ background: var(--gold-bright); transform: scale(1.3); }
+
+.dock-row{
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vmin, 30px);
+}
+
+.dice-scene{
+  width: var(--dice-size);
+  height: var(--dice-size);
+  perspective: 600px;
+}
+
+.dice{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(-18deg) rotateY(28deg);
+}
+
+.face{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #fbf6ea, var(--cream) 60%, var(--cream-dim));
+  border-radius: clamp(6px, 1vmin, 14px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 -3px 5px rgba(0,0,0,0.18) inset,
+    0 0 0 1px rgba(58,42,26,0.25);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 16%;
+}
+
+.face::before{ content: none; }
+
+.face span.pip{
+  width: 60%;
+  aspect-ratio: 1;
+  align-self: center;
+  justify-self: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #5a3f24, var(--brown-dark));
+  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
+}
+
+.face-1{ transform: rotateY(0deg) translateZ(calc(var(--dice-size) / 2)); }
+.face-2{ transform: rotateY(-90deg) translateZ(calc(var(--dice-size) / 2)); }
+.face-3{ transform: rotateX(-90deg) translateZ(calc(var(--dice-size) / 2)); }
+.face-4{ transform: rotateX(90deg) translateZ(calc(var(--dice-size) / 2)); }
+.face-5{ transform: rotateY(90deg) translateZ(calc(var(--dice-size) / 2)); }
+.face-6{ transform: rotateY(180deg) translateZ(calc(var(--dice-size) / 2)); }
+
+.dice.is-rolling{
+  animation: diceTumble 900ms cubic-bezier(.3,.15,.25,1);
+}
+@keyframes diceTumble{
+  0%{ filter: brightness(1); }
+  50%{ filter: brightness(1.12); }
+  100%{ filter: brightness(1); }
+}
+
+.roll-btn{
+  position: relative;
+  height: var(--btn-h);
+  min-width: clamp(160px, 20vmin, 260px);
+  padding: 0 clamp(20px, 2.6vmin, 36px);
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, var(--gold-dark));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -3px 5px rgba(0,0,0,0.3) inset,
+    0 3px 0 var(--gold-dark),
+    0 6px 14px rgba(0,0,0,0.45);
+  transition: transform 90ms ease, box-shadow 90ms ease;
+}
+.roll-btn-label{
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: clamp(15px, 2vmin, 24px);
+  letter-spacing: 0.14em;
+  color: var(--brown-dark);
+}
+.roll-btn-sub{
+  font-family: var(--font-body);
+  font-size: clamp(9px, 0.95vmin, 12px);
+  color: var(--brown-dark);
+  opacity: 0.65;
+}
+.roll-btn:active{
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -3px 5px rgba(0,0,0,0.3) inset,
+    0 0 0 var(--gold-dark),
+    0 2px 6px rgba(0,0,0,0.4);
+}
+.roll-btn:disabled{
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+.roll-btn.is-pressed{
+  transform: translateY(3px);
+}
+
+.key-hint{
+  font-family: var(--font-body);
+  font-size: clamp(9px, 0.95vmin, 12.5px);
+  opacity: 0.45;
+  margin: 0;
+}
+
+/* =========================================================
+   7. TOMBOL MUTE / UNMUTE
+   ========================================================= */
+
+.mute-btn{
+  position: absolute;
+  top: clamp(10px, 1.6vmin, 22px);
+  right: clamp(10px, 1.6vmin, 22px);
+  z-index: 10;
+  width: clamp(34px, 4.2vmin, 48px);
+  height: clamp(34px, 4.2vmin, 48px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, rgba(242,232,211,0.14), rgba(0,0,0,0.25));
+  border: 1px solid rgba(198,161,90,0.4);
+  color: var(--gold-bright);
+  transition: transform 120ms ease, background 160ms ease, color 160ms ease;
+}
+.mute-btn svg{
+  width: 54%;
+  height: 54%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mute-btn .icon-muted{ display: none; }
+.mute-btn.is-muted .icon-sound{ display: none; }
+.mute-btn.is-muted .icon-muted{ display: block; }
+.mute-btn:hover{ background: linear-gradient(160deg, rgba(242,232,211,0.22), rgba(0,0,0,0.3)); }
+.mute-btn:active{ transform: scale(0.94); }
+.mute-btn.is-muted{ color: var(--cream-dim); opacity: 0.75; }
+
+/* =========================================================
+   9. DEKORASI MEJA — FOTO ALBUM & KARTU REMI
+   Murni hiasan di area kosong kiri/kanan board, tidak mengubah
+   layout board/panel/dice. Diisi oleh renderTableDecor() di
+   script.js. Diletakkan di dalam .camera-rig supaya ikut idle
+   float / roll-shake yang sama seperti board (satu meja, satu
+   gerakan kamera).
+   ========================================================= */
+
+.table-decor{
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: clamp(96px, 10vw, 190px);
+  pointer-events: none;
+  z-index: 1;
+}
+.decor-left{ right: 100%; margin-right: clamp(10px, 1.8vw, 34px); }
+.decor-right{ left: 100%; margin-left: clamp(10px, 1.8vw, 34px); }
+
+/* ---- Foto: dibingkai seperti cetakan foto fisik di atas meja ---- */
+.decor-photo{
+  position: absolute;
+  width: clamp(84px, 8.6vw, 168px);
+  aspect-ratio: 0.8;
+  padding: 6.5% 6.5% 15% 6.5%;
+  box-sizing: border-box;
+  background: linear-gradient(165deg, #fbf8f1 0%, #efe7d4 100%);
+  border-radius: 3px;
+  transform: rotate(var(--tilt, 0deg));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.7) inset,
+    0 1.4vmin 1.8vmin rgba(0,0,0,0.5),
+    0 0 0 1px rgba(0,0,0,0.12);
+}
+.decor-photo::after{
+  /* tekstur kertas sangat halus */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.decor-photo img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1px;
+  background: #c9bd9a;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+}
+.decor-photo .photo-fallback{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6%;
+  background: linear-gradient(160deg, #d9cfae, #b6a97e);
+  color: rgba(58,42,26,0.6);
+  font-family: var(--font-label);
+  font-size: clamp(8px, 0.85vw, 11px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 1px;
+}
+
+/* ---- Kartu remi: kartu fisik kecil dengan simbol suit ---- */
+.decor-card{
+  position: absolute;
+  width: clamp(30px, 3.2vw, 52px);
+  aspect-ratio: 0.68;
+  background: linear-gradient(160deg, #fbf8f1 0%, #eee4cd 100%);
+  border-radius: 14%;
+  transform: rotate(var(--tilt, 0deg));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.65) inset,
+    0 0.8vmin 1vmin rgba(0,0,0,0.45),
+    0 0 0 1px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.decor-card svg{ width: 48%; height: 48%; }
+.decor-card.suit-spade svg,
+.decor-card.suit-club svg{ color: var(--ink); }
+.decor-card.suit-heart svg,
+.decor-card.suit-diamond svg{ color: #8a3b32; }
+
+/* =========================================================
+   8. RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (max-width: 1600px){
+  :root{
+    --panel-pad: clamp(16px, 2.4vmin, 38px);
+  }
+}
+
+@media (max-width: 1366px){
+  :root{
+    --board-size: min(86vh, 90vw, 1000px);
+    --num-size: clamp(8px, 1vmin, 13px);
+    --dice-size: clamp(52px, 7.4vmin, 96px);
+  }
+  .content-columns, .content-comparison .content-columns{ gap: 12px; }
+}
+
+@media (max-width: 1280px){
+  :root{
+    --board-size: min(88vh, 92vw, 900px);
+    --btn-h: clamp(52px, 7.6vmin, 80px);
+  }
+  .roll-btn-sub{ display: none; }
+
+  /* Ruang menyempit: lepas kartu aksen lepas, sisakan tumpukan utama */
+  .table-decor{ width: clamp(76px, 8vw, 140px); }
+  .decor-card:last-of-type{ display: none; }
+}
+
+@media (max-width: 1024px){
+  :root{
+    --board-size: min(90vh, 94vw, 780px);
+    --panel-pad: clamp(12px, 2.2vmin, 28px);
+    --icon-size: clamp(28px, 4vmin, 44px);
+  }
+  .content-columns{ grid-template-columns: 1fr; }
+  .cover-members{ font-size: clamp(10px, 1.4vmin, 14px); }
+
+  /* Board & content panel diprioritaskan: kartu disembunyikan,
+     foto dipertahankan lebih kecil selama masih ada ruang. */
+  .table-decor{ width: clamp(58px, 6.4vw, 108px); margin-left: 8px; margin-right: 8px; }
+  .decor-card{ display: none; }
+}
+
+@media (max-width: 900px){
+  /* Di lebar ini board sudah memakai hampir seluruh layar (lihat
+     media (max-width: 900px) pada .board-status) — dekorasi meja
+     dilepas seluruhnya supaya board tidak pernah terpotong. */
+  .table-decor{ display: none; }
+}
+
+@media (max-height: 620px){
+  .dice-dock{ margin-top: 6px; gap: 6px; }
+  .key-hint{ display: none; }
+}
+
+/* Fade-in halaman presentasi */
+body {
+  opacity: 0;
+  animation: presentationFadeIn 1.5s ease forwards;
+}
+
+@keyframes presentationFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

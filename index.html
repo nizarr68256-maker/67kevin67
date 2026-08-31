@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Opening — Presentasi suki</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="city.css" />
+		<link rel="stylesheet" href="city-ui.css" />
+	</head>
+	<body>
+		<div class="app">
+			<!-- Background bintang, di-generate oleh script.js -->
+			<div id="starfield" class="starfield" aria-hidden="true"></div>
+
+			<main class="scene">
+				<!-- SISI KIRI: headline, subtitle, tombol -->
+				<section class="hero-left">
+					<h1 class="headline">
+						<span class="line">KELOMPOK 1</span>
+						<span class="line">MODERNISASI</span>
+						<span class="line line-accent">IPS IX A</span>
+					</h1>
+
+					<p class="subtitle">SUKI🤓☝</p>
+
+					<div class="play-wrap">
+						<button
+							class="play-button"
+							id="playButton"
+							type="button"
+						>
+							<span class="play-icon" aria-hidden="true"></span>
+							<span>PLAY</span>
+						</button>
+					</div>
+				</section>
+
+				<!-- SISI KANAN: Bumi 3D photorealistic (dirender via WebGL/Three.js) -->
+				<section class="hero-right" aria-hidden="true">
+					<div class="earth-stage" id="earthStage">
+						<canvas id="earthCanvas"></canvas>
+					</div>
+				</section>
+			</main>
+
+			<footer class="footer">© created by Yusmentoro67</footer>
+		</div>
+
+		<!-- CITY — fondasi scene tujuan transisi (masih placeholder, kosong) -->
+		<div id="cityStage" class="city-stage">
+			<canvas id="cityCanvas"></canvas>
+		</div>
+
+		<!-- Overlay flash untuk transisi Earth → City -->
+		<div
+			id="transitionFlash"
+			class="transition-flash"
+			aria-hidden="true"
+		></div>
+
+		<!-- Three.js: dipakai khusus untuk merender objek Bumi 3D photorealistic,
+               dan sekarang juga dipakai bersama untuk City -->
+		<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+		<!-- Di dalam body, sebelum script.js -->
+		<audio
+			id="bgAudio"
+			loop
+			preload="auto"
+			src="audio/background.mp3"
+		></audio>
+		<script src="script.js"></script>
+		<script src="city-config.js"></script>
+		<script src="city-ui.js"></script>
+		<script src="city.js"></script>
+	</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Presentasi Interaktif — Board Game Template</title>
+
+<!-- Google Fonts (opsional). Jika tidak ada koneksi internet, fallback font-stack di style.css tetap membuat tampilan bekerja dengan baik. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <!-- Lapisan meja billiard: tekstur, noise, vignette, ambient light -->
+  <div class="table-surface" id="tableSurface">
+    <div class="felt-texture"></div>
+    <div class="felt-noise" id="feltNoise"></div>
+    <div class="ambient-glow"></div>
+    <div class="table-vignette"></div>
+  </div>
+
+  <!-- Tombol mute/unmute — kontrol suara global -->
+  <button class="mute-btn" id="muteBtn" type="button" aria-label="Matikan suara">
+    <svg class="icon-sound" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" stroke="currentColor" stroke-linejoin="round"/>
+      <path d="M16.4 8.6a5 5 0 0 1 0 6.8" stroke="currentColor"/>
+      <path d="M19 6a8.5 8.5 0 0 1 0 12" stroke="currentColor"/>
+    </svg>
+    <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" stroke="currentColor" stroke-linejoin="round"/>
+      <path d="M15.5 9.5 20.5 14.5M20.5 9.5 15.5 14.5" stroke="currentColor"/>
+    </svg>
+  </button>
+
+  <!-- Rig kamera virtual: idle float + shake/zoom saat roll -->
+  <div class="camera-rig" id="cameraRig">
+
+    <!-- Dekorasi meja: foto album (kiri) + kartu remi, diisi oleh script.js -->
+    <div class="table-decor decor-left" id="decorLeft" aria-hidden="true"></div>
+
+    <div class="board" id="board">
+
+      <!-- Plakat status kecil, seperti lempengan kuningan terpasang di sudut board -->
+      <div class="board-status" id="boardStatus" aria-hidden="true">
+        <p class="board-status-label">Presentasi</p>
+        <p class="board-status-value"><span id="statusCurrent">00</span>/<span id="statusTotal">00</span></p>
+        <p class="board-status-tile">Petak <span id="statusTile">00</span></p>
+      </div>
+
+      <div class="board-frame">
+
+        <div class="board-trim"></div>
+
+        <!-- Pelindung sudut bergaya logam, bagian dari desain fisik board -->
+        <div class="corner-ornament corner-tl"></div>
+        <div class="corner-ornament corner-tr"></div>
+        <div class="corner-ornament corner-bl"></div>
+        <div class="corner-ornament corner-br"></div>
+
+        <!-- 40 petak dibuat oleh JavaScript -->
+        <div class="tiles-layer" id="tilesLayer"></div>
+
+        <!-- Pion: miniatur pion board-game bergaya bevel/metalik, terdiri dari beberapa bagian -->
+        <div class="pion" id="pion" aria-hidden="true">
+          <div class="pion-shadow"></div>
+          <div class="pawn-figure">
+            <div class="pawn-base"></div>
+            <div class="pawn-stem"></div>
+            <div class="pawn-collar"></div>
+            <div class="pawn-body"></div>
+            <div class="pawn-head"></div>
+            <div class="pawn-shine"></div>
+          </div>
+        </div>
+
+        <!-- Panel konten di tengah papan -->
+        <div class="center-panel" id="centerPanel">
+          <div class="panel-frame">
+            <div class="panel-inner" id="panelInner">
+
+              <!-- COVER STATE -->
+              <section class="cover-view" id="coverView">
+                <p class="cover-eyebrow" id="coverEyebrow">Presentasi Interaktif</p>
+                <h1 class="cover-title" id="coverTitle">Judul Presentasi</h1>
+                <div class="cover-divider"><span></span><i class="divider-gem"></i><span></span></div>
+                <p class="cover-group" id="coverGroup">Kelompok</p>
+                <ul class="cover-members" id="coverMembers"></ul>
+                <p class="cover-hint">Tekan <b>ROLL</b> atau <b>SPASI</b> untuk memulai</p>
+              </section>
+
+              <!-- SLIDE STATE -->
+              <section class="slide-view" id="slideView" hidden>
+                <header class="slide-header">
+                  <div class="slide-icon" id="slideIcon"></div>
+                  <div class="slide-heading">
+                    <p class="slide-subtitle" id="slideSubtitle"></p>
+                    <h2 class="slide-title" id="slideTitle"></h2>
+                  </div>
+                  <div class="slide-tag" id="slideTag"></div>
+                </header>
+                <div class="slide-body" id="slideBody"></div>
+              </section>
+
+              <!-- FINISH STATE -->
+              <section class="finish-view" id="finishView" hidden>
+                <div class="slide-icon finish-icon"></div>
+                <p class="cover-eyebrow">Selesai</p>
+                <h2 class="cover-title finish-title">Presentasi Berakhir</h2>
+                <p class="finish-text">Terima kasih atas perhatiannya.</p>
+                <button class="restart-btn" id="restartBtn" type="button">Ulangi dari Awal</button>
+              </section>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Dekorasi meja: foto album (kanan) + kartu remi, diisi oleh script.js -->
+    <div class="table-decor decor-right" id="decorRight" aria-hidden="true"></div>
+
+  </div>
+
+  <!-- Dok dadu + tombol -->
+  <div class="dice-dock">
+    <div class="progress-track" id="progressTrack"></div>
+
+    <div class="dock-row">
+      <div class="dice-scene" id="diceScene" aria-hidden="true">
+        <div class="dice" id="dice">
+          <div class="face face-1"></div>
+          <div class="face face-2"></div>
+          <div class="face face-3"></div>
+          <div class="face face-4"></div>
+          <div class="face face-5"></div>
+          <div class="face face-6"></div>
+        </div>
+      </div>
+
+      <button class="roll-btn" id="rollBtn" type="button">
+        <span class="roll-btn-label">ROLL</span>
+        <span class="roll-btn-sub">Ketuk untuk lempar dadu</span>
+      </button>
+    </div>
+
+    <p class="key-hint">SPASI / ENTER — lempar dadu &nbsp;·&nbsp; ← → — navigasi slide</p>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

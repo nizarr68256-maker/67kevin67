@@ -1,0 +1,467 @@
+/* ============ SLIDE 2 TOKENS ============ */
+:root {
+    --bg-start: #d6eaff;
+    --bg-mid: #3a6ea5;
+    --bg-end: #0a1930;
+    --text-dark: #0b1e3a;
+    --text-muted: #1e3a56;
+    --text-on-glass: #0b1f33;
+    --glass-bg: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-blur: 0px;
+    --active-blue: #1e6fd9;
+    --active-blue-bright: #3490ff;
+    --active-glow: rgba(52, 144, 255, 0.35);
+    --wheel-inactive: #9ca3af;
+    --wheel-active: #0b1e3a;
+    --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.15);
+    --wheel-d: 110vh;
+    --wheel-r: 55vh;
+    --wheel-cx: 2vw;
+    --node-size: min(16vh, 160px);
+}
+
+/* ============ SLIDE 2 BACKGROUND ============ */
+#slide2 {
+    background: linear-gradient(145deg, var(--bg-start) 0%, var(--bg-mid) 55%, var(--bg-end) 100%);
+}
+#slide2 .ambient-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+#slide2 .sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #8fd3ff 0%, #c8e9ff 45%, #f5fbff 78%, #ffffff 100%);
+}
+#slide2 .sun {
+    position: absolute;
+    top: 5%;
+    right: 15%;
+    width: 42vmin;
+    height: 42vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 220, 0.95) 0%, rgba(255, 245, 190, 0.5) 45%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0.9;
+}
+#slide2 .sun::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 250, 220, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none;
+}
+
+/* Awan */
+#slide2 .clouds {
+    position: absolute;
+    inset: 0;
+}
+#slide2 .cloud {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+#slide2 .cloud span {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+}
+#slide2 .cloud--1 {
+    top: 18%;
+    left: 5%;
+    width: 20vmin;
+    height: 8vmin;
+    border-radius: 10vmin;
+    animation: cloudDrift1 45s ease-in-out infinite alternate;
+}
+#slide2 .cloud--1 span:nth-child(1) { top: -4vmin; left: 4vmin; width: 6vmin; height: 6vmin; }
+#slide2 .cloud--1 span:nth-child(2) { top: -2vmin; left: 10vmin; width: 8vmin; height: 8vmin; }
+#slide2 .cloud--1 span:nth-child(3) { top: -5vmin; left: 16vmin; width: 5vmin; height: 5vmin; }
+#slide2 .cloud--2 {
+    top: 10%;
+    right: 20%;
+    width: 18vmin;
+    height: 7vmin;
+    border-radius: 9vmin;
+    opacity: 0.5;
+    animation: cloudDrift2 55s ease-in-out infinite alternate;
+}
+#slide2 .cloud--2 span:nth-child(1) { top: -3vmin; left: 3vmin; width: 5vmin; height: 5vmin; }
+#slide2 .cloud--2 span:nth-child(2) { top: -2vmin; left: 8vmin; width: 7vmin; height: 7vmin; }
+#slide2 .cloud--2 span:nth-child(3) { top: -4vmin; left: 13vmin; width: 4vmin; height: 4vmin; }
+#slide2 .cloud--3 {
+    bottom: 35%;
+    left: 35%;
+    width: 22vmin;
+    height: 8vmin;
+    border-radius: 11vmin;
+    opacity: 0.6;
+    animation: cloudDrift3 40s ease-in-out infinite alternate;
+}
+#slide2 .cloud--3 span:nth-child(1) { top: -4vmin; left: 5vmin; width: 6vmin; height: 6vmin; }
+#slide2 .cloud--3 span:nth-child(2) { top: -3vmin; left: 11vmin; width: 9vmin; height: 9vmin; }
+#slide2 .cloud--3 span:nth-child(3) { top: -6vmin; left: 17vmin; width: 5vmin; height: 5vmin; }
+#slide2 .cloud--4 {
+    top: 30%;
+    right: 5%;
+    width: 16vmin;
+    height: 6vmin;
+    border-radius: 8vmin;
+    opacity: 0.4;
+    animation: cloudDrift4 50s ease-in-out infinite alternate;
+}
+#slide2 .cloud--4 span:nth-child(1) { top: -3vmin; left: 4vmin; width: 4vmin; height: 4vmin; }
+#slide2 .cloud--4 span:nth-child(2) { top: -2vmin; left: 9vmin; width: 6vmin; height: 6vmin; }
+#slide2 .cloud--4 span:nth-child(3) { top: -4vmin; left: 13vmin; width: 3vmin; height: 3vmin; }
+
+@keyframes cloudDrift1 { from { transform: translateX(0); } to { transform: translateX(20vw); } }
+@keyframes cloudDrift2 { from { transform: translateX(0); } to { transform: translateX(-15vw); } }
+@keyframes cloudDrift3 { from { transform: translateX(0); } to { transform: translateX(25vw); } }
+@keyframes cloudDrift4 { from { transform: translateX(0); } to { transform: translateX(-20vw); } }
+
+/* Gedung */
+#slide2 .buildings {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+}
+#slide2 .building-layer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#slide2 .building-layer--distant { opacity: 0.5; }
+#slide2 .building-layer--mid { opacity: 0.8; }
+#slide2 .building-layer--foreground { opacity: 1; }
+
+#slide2 .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: radial-gradient(circle at 25% 25%, #ffffff 0 2px, transparent 3px), radial-gradient(circle at 75% 75%, #ffffff 0 2px, transparent 3px);
+    background-size: 64px 64px;
+    z-index: 1;
+}
+
+/* ============ WHEEL ============ */
+#slide2 .wheel-zone {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;                     /* ← dinaikkan dari 2 ke 4 agar orbit icon di atas panel */
+    overflow: hidden;
+}
+#slide2 .wheel-shell {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--wheel-cx) - var(--wheel-r));
+    width: var(--wheel-d);
+    height: var(--wheel-d);
+    transform: translateY(-50%) rotate(var(--spin));
+    transition: transform var(--spin-duration) var(--spin-ease);
+    border-radius: 50%;
+    pointer-events: none;
+}
+#slide2 .wheel-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(255, 255, 255, 0.45) 0deg 90deg, rgba(255, 255, 255, 0.28) 90deg 180deg, rgba(255, 255, 255, 0.45) 180deg 270deg, rgba(255, 255, 255, 0.28) 270deg 360deg), radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0.1) 100%);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), inset 0 0 60px rgba(255, 255, 255, 0.3), 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+#slide2 .wheel-dial {
+    position: absolute;
+    inset: 5%;
+    border-radius: 50%;
+    background: repeating-conic-gradient(rgba(255, 255, 255, 0.25) 0deg 0.4deg, transparent 0.4deg 12deg);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 18px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 18px));
+    opacity: 0.5;
+}
+#slide2 .wheel-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.35); }
+#slide2 .wheel-ring--outer { inset: 2%; }
+#slide2 .wheel-ring--inner { inset: 20%; border-color: rgba(255, 255, 255, 0.5); opacity: 0.7; }
+#slide2 .spoke {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--wheel-r);
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.4) 0%, transparent 85%);
+    transform-origin: left center;
+    transform: rotate(var(--line-angle));
+}
+#slide2 .wheel-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform: rotate(var(--angle)) translateX(var(--wheel-r));
+}
+#slide2 .wheel-node__inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--node-size);
+    height: var(--node-size);
+    margin-left: calc(var(--node-size) / -2);
+    margin-top: calc(var(--node-size) / -2);
+    transform: rotate(calc(-1 * (var(--angle) + var(--spin))));
+    transition: transform var(--spin-duration) var(--spin-ease), opacity 420ms ease, color 420ms ease, background 420ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--wheel-inactive);
+    opacity: 0.7;
+    border-radius: 50%;
+    background: transparent;
+}
+#slide2 .wheel-node__icon { width: 34%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; }
+#slide2 .wheel-node__icon svg { width: 100%; height: 100%; }
+#slide2 .wheel-node__label {
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.5vh, 18px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+}
+#slide2 .wheel-node.is-active .wheel-node__inner {
+    color: var(--wheel-active);
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8%;
+    transform: rotate(calc(-1 * (var(--angle) + var(--spin)))) scale(1.05);
+    box-shadow: 0 0 15px rgba(52, 144, 255, 0.4);
+}
+#slide2 .wheel-node.is-active .wheel-node__icon { width: 42%; }
+#slide2 .wheel-node.is-active .wheel-node__label { font-size: clamp(16px, 2vh, 22px); }
+
+/* Tombol spin */
+#slide2 .spin-btn {
+    position: absolute;
+    top: 50%;
+    left: var(--wheel-cx);
+    transform: translate(-50%, -50%);
+    width: min(10vh, 100px);
+    height: min(10vh, 100px);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.65) 70%);
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 0 6px rgba(255, 255, 255, 0.15);
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+    z-index: 5;
+}
+#slide2 .spin-btn svg { width: 34%; height: 34%; margin-left: 4%; fill: currentColor; }
+#slide2 .spin-btn:hover { background: radial-gradient(circle at 35% 30%, #ffffff 0%, rgba(255, 255, 255, 0.8) 70%); }
+#slide2 .spin-btn:active { transform: translate(-50%, -50%) scale(0.94); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+#slide2 .spin-btn:focus-visible { outline: 2px solid #3490ff; outline-offset: 4px; }
+#slide2 .spin-btn:disabled { cursor: default; opacity: 0.7; }
+
+/* ============ CONTENT ZONE ============ */
+#slide2 .content-zone {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 50%;                        /* ← digeser ke kanan agar tidak menutupi orbit icon */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--safe-pad) 7vw var(--safe-pad) 2vw;
+    z-index: 3;
+}
+#slide2 .slide-title {
+    margin: 0 0 2.5vh 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(48px, 8vh, 80px);
+    line-height: 1.1;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 30, 60, 0.3);
+    letter-spacing: -0.01em;
+}
+#slide2 .content-track {
+    position: relative;
+    min-height: 52vh;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 4vh 3vw;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+#slide2 .content-panel {
+    position: absolute;
+    inset: 4vh 3vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 400ms ease, transform 400ms ease;
+    pointer-events: none;
+}
+#slide2 .content-panel.is-active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#slide2 .content-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(36px, 5vh, 48px);
+    line-height: 1.1;
+    color: var(--text-on-glass);
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 8px rgba(0, 30, 60, 0.1);
+}
+#slide2 .content-rule { display: block; width: 72px; height: 3px; margin: 2.2vh 0; background: linear-gradient(to right, var(--active-blue-bright), transparent); border-radius: 2px; }
+#slide2 .content-desc {
+    margin: 0 0 2.4vh 0;
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 2.8vh, 28px);
+    line-height: 1.5;
+    color: var(--text-on-glass);
+    text-shadow: 0 1px 6px rgba(0, 30, 60, 0.08);
+}
+#slide2 .content-points { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 1.4vh; max-width: 40ch; }
+#slide2 .content-points li {
+    position: relative;
+    padding-left: 24px;
+    font-size: clamp(19px, 2.2vh, 23px);
+    line-height: 1.5;
+    color: var(--text-muted);
+    text-shadow: 0 1px 4px rgba(0, 30, 60, 0.05);
+}
+#slide2 .content-points li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 12px; height: 2px; background: var(--active-blue-bright); border-radius: 2px; }
+
+#slide2 .progress-track { display: flex; gap: 10px; margin-top: 3vh; }
+#slide2 .progress-track .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); transition: background 300ms ease, transform 300ms ease; }
+#slide2 .progress-track .dot.is-active { background: var(--active-blue-bright); transform: scale(1.6); box-shadow: 0 0 10px var(--active-glow); }
+
+#slide2 .connector {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--wheel-cx) + var(--wheel-r) * 0.55);
+    width: 12vw;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(52, 144, 255, 0.4));
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.6;
+}
+#slide2 .connector::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--active-blue-bright);
+    transform: translateY(-50%);
+    box-shadow: 0 0 14px var(--active-glow);
+    opacity: 0.9;
+}
+
+/* ============ RESPONSIVE — LAYAR SEMPIT / PORTRAIT ============ */
+/* Di layar lebar (TV, monitor, laptop) layout asli (wheel + panel
+   berdampingan) dipertahankan sepenuhnya. Di layar sempit/portrait,
+   wheel & panel konten ditumpuk vertikal agar tidak bertabrakan
+   atau membuat teks meluber. */
+@media (max-width: 900px), (orientation: portrait) {
+    #slide2 {
+        display: flex;
+        flex-direction: column;
+        --wheel-d: min(58vmin, 36vh);
+        --wheel-r: min(29vmin, 18vh);
+        --node-size: min(12vmin, 9vh, 84px);
+    }
+    #slide2 .wheel-zone {
+        position: relative;
+        inset: auto;
+        flex: 0 0 auto;
+        height: 40vh;
+        overflow: visible;
+    }
+    #slide2 .wheel-shell {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(var(--spin));
+    }
+    #slide2 .spin-btn {
+        left: 50%;
+    }
+    #slide2 .connector {
+        display: none;
+    }
+    #slide2 .content-zone {
+        position: relative;
+        inset: auto;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+        flex: 1 1 auto;
+        padding: 1.5vh 5vw 3vh;
+        justify-content: flex-start;
+        min-height: 0;
+    }
+    #slide2 .slide-title {
+        font-size: clamp(26px, 7vmin, 44px);
+        margin-bottom: 1.4vh;
+    }
+    #slide2 .content-track {
+        min-height: 0;
+        flex: 1 1 auto;
+        padding: 2.4vh 4vw;
+    }
+    #slide2 .content-panel {
+        inset: 2.4vh 4vw;
+    }
+    #slide2 .content-desc {
+        max-width: 46ch;
+        font-size: clamp(15px, 3.6vw, 20px);
+        margin-bottom: 1.6vh;
+    }
+    #slide2 .content-points {
+        max-width: 46ch;
+        gap: 1vh;
+    }
+    #slide2 .content-points li {
+        font-size: clamp(13px, 3.2vw, 17px);
+    }
+}
+
+/* ============ RESPONSIVE — LAYAR PENDEK ============ */
+@media (max-height: 600px) {
+    #slide2 .slide-title {
+        font-size: clamp(26px, 6vh, 48px);
+        margin-bottom: 1.2vh;
+    }
+    #slide2 .content-desc {
+        font-size: clamp(15px, 2.4vh, 20px);
+    }
+}

@@ -1,0 +1,333 @@
+/* ==========================================================
+   CITY — STYLES (fondasi)
+   ==========================================================
+   Hanya mengatur container & canvas City, plus kelas-kelas
+   yang dibutuhkan untuk transisi Earth → City. Tidak ada HUD
+   atau UI City di sini. File ini baru, style.css yang lama
+   sama sekali tidak diubah.
+   ========================================================== */
+
+/* ---------- Container & canvas City ---------- */
+.city-stage {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	z-index: 10;
+	background: #05070c;
+
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.5s ease;
+}
+
+.city-stage.is-visible {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+#cityCanvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* ==========================================================
+   EARTH → CITY TRANSITION
+   ==========================================================
+   Kelas-kelas di bawah ini di-toggle lewat script.js saat
+   tombol PLAY ditekan. Tidak mengubah satu pun rule yang
+   sudah ada di style.css — hanya menambahkan state baru.
+   ========================================================== */
+
+/* Sembunyikan headline/subtitle/tombol/footer secara halus */
+.app.is-launching .hero-left,
+.app.is-launching .footer {
+	opacity: 0;
+	transition: opacity 0.6s ease;
+	pointer-events: none;
+}
+
+/* Bumi membesar mengisi layar — durasi disesuaikan agar ada ruang
+   untuk fase glow atmosfer + cloud dive sebelum City terlihat. */
+.earth-stage.is-launching {
+	transition:
+		transform 2.7s ease-in,
+		filter 2.7s ease-in;
+}
+
+/* Haze atmosfer translusen (bukan flash solid) — menyatu dengan
+   scene lewat mix-blend-mode, jadi terasa seperti kabut awan,
+   bukan potongan layar putih. */
+.transition-flash {
+	position: fixed;
+	inset: 0;
+	z-index: 20;
+	background: radial-gradient(
+		circle at 50% 50%,
+		rgba(233, 244, 255, 0.85) 0%,
+		rgba(140, 196, 255, 0.5) 45%,
+		rgba(5, 7, 12, 0.1) 100%
+	);
+	mix-blend-mode: screen;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.9s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.transition-flash.is-active {
+	opacity: 0.88;
+	transition: opacity 0.7s cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+/* ==========================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+	.city-stage,
+	.transition-flash,
+	.app.is-launching .hero-left,
+	.app.is-launching .footer,
+	.earth-stage.is-launching {
+		transition: none !important;
+	}
+}
+
+/* ==========================================================
+   CITY INTRO OVERLAY (gradient atas‑bawah + teks MODERNISASI)
+   ========================================================== */
+.city-intro-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	pointer-events: none;
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.65) 0%,
+		rgba(0, 0, 0, 0) 18%,
+		rgba(0, 0, 0, 0) 82%,
+		rgba(0, 0, 0, 0.65) 100%
+	);
+	opacity: 0;
+	transition: opacity 1.2s ease; /* lebih lambat */
+}
+
+.city-intro-overlay.is-visible {
+	opacity: 1;
+}
+
+.city-intro-overlay.is-hidden {
+	opacity: 0;
+	transition: opacity 1.5s ease; /* fade out lebih halus */
+}
+
+.city-intro-overlay__text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding: 0 20px;
+}
+
+.city-intro-overlay__label {
+	font-family: "Space Grotesk", "Inter", sans-serif;
+	font-size: clamp(2rem, 5vw, 4rem);
+	font-weight: 700;
+	letter-spacing: 0.35em;
+	color: #ffffff;
+	text-align: center;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+	opacity: 0;
+	transform: translateY(15px);
+	animation: cityIntroTextIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes cityIntroTextIn {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ==========================================================
+   CITY SIDE GRADIENT (kanan) — muncul setelah kamera stop
+   ========================================================== */
+.city-side-gradient {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 40%;
+	min-width: 340px;
+	max-width: 600px;
+	z-index: 45;
+	pointer-events: none;
+	background: linear-gradient(
+		to left,
+		rgba(0, 0, 0, 0.95) 0%,
+		rgba(0, 0, 0, 0.85) 30%,
+		rgba(0, 0, 0, 0.55) 65%,
+		rgba(0, 0, 0, 0) 100%
+	);
+	overflow: hidden;
+	transform: translateX(100%);
+	transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+	will-change: transform;
+}
+
+.city-side-gradient.is-visible {
+	transform: translateX(0);
+}
+
+.city-side-gradient.is-hidden {
+	transform: translateX(100%);
+	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.city-side-gradient__content {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	width: 100%;
+	padding: 40px 48px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* center horizontal */
+	text-align: center;
+	gap: 16px;
+	overflow: hidden; /* potong elemen yang belum tampil */
+}
+
+.city-side-gradient__headline {
+	font-family: "Space Grotesk", "Inter", sans-serif;
+	font-weight: 700;
+	line-height: 1.2;
+	margin: 0;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.city-side-gradient__headline--blue {
+	color: #6eb6ff;
+	font-size: clamp(2.5rem, 5vw, 3.5rem);
+	letter-spacing: 0.02em;
+}
+
+.city-side-gradient__headline--yellow {
+	color: #ffd966;
+	font-size: clamp(1.6rem, 3vw, 2.2rem);
+	font-weight: 600;
+}
+
+.city-side-gradient__subtitle {
+	margin-top: 12px;
+	font-family: "Space Grotesk", "Inter", sans-serif;
+	font-size: 1.4rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	color: #ffffff;
+	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.city-side-gradient__list {
+	list-style: none;
+	margin: 10px 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+}
+
+.city-side-gradient__list-item {
+	font-family: "Inter", sans-serif;
+	font-size: 1.15rem;
+	line-height: 1.4;
+	color: rgba(255, 255, 255, 0.95);
+	white-space: nowrap;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Animasi slide masuk satu per satu */
+.city-side-gradient__content > * {
+	transform: translateX(200%);
+	animation: citySideTextSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Delay berurutan (0.3 detik antar elemen) */
+.city-side-gradient__headline--blue {
+	animation-delay: 0.1s;
+}
+.city-side-gradient__headline--yellow {
+	animation-delay: 0.4s;
+}
+.city-side-gradient__subtitle {
+	animation-delay: 0.7s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(1) {
+	animation-delay: 1s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(2) {
+	animation-delay: 1.3s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(3) {
+	animation-delay: 1.6s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(4) {
+	animation-delay: 1.9s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(5) {
+	animation-delay: 2.2s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(6) {
+	animation-delay: 2.5s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(7) {
+	animation-delay: 2.8s;
+}
+.city-side-gradient__list .city-side-gradient__list-item:nth-child(8) {
+	animation-delay: 3.1s;
+}
+
+@keyframes citySideTextSlideIn {
+	from {
+		transform: translateX(200%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.city-intro-overlay,
+	.city-intro-overlay.is-visible,
+	.city-intro-overlay.is-hidden,
+	.city-side-gradient,
+	.city-side-gradient.is-visible,
+	.city-side-gradient.is-hidden {
+		transition: none !important;
+		transform: none !important;
+	}
+	.city-intro-overlay__label,
+	.city-side-gradient__content > * {
+		animation: none !important;
+		transform: none !important;
+	}
+}
+/* Menghilangkan efek bawaan browser pada tombol PLAY */
+#playButton,
+#playButton:focus,
+#playButton:active,
+#playButton:focus-visible {
+	-webkit-tap-highlight-color: transparent; /* hilangkan highlight saat tap di mobile */
+	outline: none; /* hilangkan outline fokus */
+	appearance: none;
+	-webkit-appearance: none;
+	user-select: none;
+	-webkit-user-select: none;
+}

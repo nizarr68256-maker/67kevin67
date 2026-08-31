@@ -1,0 +1,312 @@
+/* ==========================================================
+   VARIABLES
+   ========================================================== */
+:root {
+  --bg-1: #0a0e18;
+  --bg-2: #05060a;
+
+  --text-primary: #f5f7fb;
+  --text-secondary: rgba(226, 232, 245, 0.62);
+  --text-faint: rgba(226, 232, 245, 0.35);
+
+  --accent: #6fc6ff;
+  --accent-soft: rgba(111, 198, 255, 0.35);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ==========================================================
+   RESET
+   ========================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-2);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* tidak boleh ada scrollbar */
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+/* ==========================================================
+   APP SHELL / BACKGROUND
+   ========================================================== */
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 78% 45%, rgba(60, 90, 130, 0.16), transparent 55%),
+    radial-gradient(ellipse at 15% 85%, rgba(30, 50, 80, 0.12), transparent 50%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 55%, #030408 100%);
+}
+
+/* ==========================================================
+   STARFIELD
+   ========================================================== */
+.starfield {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff;
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: opacity;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: var(--base-opacity, 0.5); }
+  50%      { opacity: calc(var(--base-opacity, 0.5) * 0.25); }
+}
+
+/* ==========================================================
+   SCENE / LAYOUT
+   ========================================================== */
+.scene {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 5vw, 64px);
+  padding: 0 clamp(28px, 7vw, 96px);
+}
+
+/* ---------- HERO LEFT ---------- */
+.hero-left {
+  flex: 1 1 480px;
+  max-width: 560px;
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+
+.headline .line {
+  display: block;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: rise 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.headline .line:nth-child(1) { animation-delay: 0.15s; }
+.headline .line:nth-child(2) { animation-delay: 0.30s; }
+.headline .line:nth-child(3) { animation-delay: 0.45s; }
+
+.line-accent {
+  color: var(--accent);
+}
+
+.subtitle {
+  margin-top: clamp(16px, 2.4vw, 24px);
+  max-width: 440px;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text-secondary);
+
+  opacity: 0;
+  transform: translateY(18px);
+  animation: rise 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.75s;
+}
+
+.play-wrap {
+  margin-top: clamp(28px, 4vw, 40px);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: rise 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 1.05s;
+}
+
+.play-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 34px 15px 28px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.35s ease, border-color 0.35s ease,
+              transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.play-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+  transition: transform 0.35s ease;
+}
+
+.play-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-soft);
+  box-shadow: 0 0 24px rgba(111, 198, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+.play-button:hover .play-icon {
+  transform: translateX(2px);
+}
+
+.play-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ---------- HERO RIGHT / EARTH ---------- */
+.hero-right {
+  flex: 1 1 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.earth-stage {
+  position: relative;
+  width: clamp(260px, 30vw, 520px);
+  height: clamp(260px, 30vw, 520px);
+
+  /* Menunggu tekstur Bumi selesai dimuat (lihat script.js),
+     baru fade + scale in — supaya tidak ada "kedipan" bola kosong. */
+  opacity: 0;
+  transform: scale(0.82);
+  transition: opacity 1.4s cubic-bezier(0.19, 1, 0.22, 1),
+              transform 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.earth-stage.is-ready {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#earthCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer {
+  position: absolute;
+  bottom: clamp(14px, 3vh, 28px);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* ==========================================================
+   SHARED ANIMATION
+   ========================================================== */
+@keyframes rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 900px) {
+  .scene {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: clamp(24px, 6vh, 48px);
+    padding-bottom: clamp(48px, 9vh, 72px);
+    gap: clamp(18px, 4vh, 32px);
+  }
+
+  .hero-left { order: 2; max-width: 480px; }
+  .hero-right { order: 1; }
+
+  .subtitle { margin-left: auto; margin-right: auto; }
+
+  .play-wrap { display: flex; justify-content: center; }
+
+  .earth-stage {
+    width: clamp(160px, 42vw, 240px);
+    height: clamp(160px, 42vw, 240px);
+  }
+
+  .headline { font-size: clamp(1.9rem, 8vw, 2.6rem); }
+}
+
+@media (max-height: 600px) {
+  .scene { gap: 14px; }
+
+  .earth-stage {
+    width: clamp(110px, 24vh, 180px);
+    height: clamp(110px, 24vh, 180px);
+  }
+
+  .headline { font-size: clamp(1.5rem, 6vh, 2.1rem); }
+  .subtitle { margin-top: 8px; }
+  .play-wrap { margin-top: 14px; }
+}
+
+/* ==========================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .headline .line,
+  .subtitle,
+  .play-wrap,
+  .earth-stage {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .earth-terrain { animation: none !important; }
+
+  .star {
+    animation: none !important;
+    opacity: var(--base-opacity, 0.5) !important;
+  }
+
+  .play-button { transition: none; }
+}
+

@@ -1,0 +1,1197 @@
+/* ============ SLIDE 3 — MODERN ≠ MELUPAKAN ============ */
+#slide3 {
+	background: transparent;
+}
+
+/* Background storyteller */
+#slide3 .slide3-bg {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+/* Langit transisi sore → siang (orange dominan) */
+#slide3 .slide3-sky {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		90deg,
+		#d96c3b 0%,
+		#e0873e 12%,
+		#f1a45d 25%,
+		#f7c47b 40%,
+		#fae3b3 55%,
+		#d8e8f0 75%,
+		#cfe8f5 100%
+	);
+	opacity: 0.85;
+}
+
+/* Matahari di kanan atas */
+#slide3 .slide3-sun {
+	position: absolute;
+	top: 8%;
+	right: 10%;
+	width: 20vmin;
+	height: 20vmin;
+	border-radius: 50%;
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 220, 0.95) 0%,
+		rgba(255, 240, 190, 0.55) 40%,
+		rgba(255, 255, 255, 0) 70%
+	);
+	opacity: 0.9;
+}
+#slide3 .slide3-sun::after {
+	content: "";
+	position: absolute;
+	inset: -60%;
+	border-radius: 50%;
+	background: radial-gradient(
+		circle,
+		rgba(255, 250, 220, 0.45) 0%,
+		rgba(255, 255, 255, 0) 65%
+	);
+	pointer-events: none;
+}
+
+/* Awan */
+#slide3 .slide3-cloud {
+	position: absolute;
+	background: #ffffff;
+	border-radius: 50%;
+	opacity: 0.6;
+}
+#slide3 .slide3-cloud::before,
+#slide3 .slide3-cloud::after {
+	content: "";
+	position: absolute;
+	background: #ffffff;
+	border-radius: 50%;
+}
+#slide3 .slide3-cloud--1 {
+	top: 15%;
+	left: 8%;
+	width: 18vmin;
+	height: 6vmin;
+	border-radius: 9vmin;
+}
+#slide3 .slide3-cloud--1::before {
+	top: -3vmin;
+	left: 4vmin;
+	width: 7vmin;
+	height: 7vmin;
+}
+#slide3 .slide3-cloud--1::after {
+	top: -2vmin;
+	left: 12vmin;
+	width: 6vmin;
+	height: 6vmin;
+}
+#slide3 .slide3-cloud--2 {
+	top: 25%;
+	right: 18%;
+	width: 22vmin;
+	height: 7vmin;
+	border-radius: 11vmin;
+	opacity: 0.5;
+}
+#slide3 .slide3-cloud--2::before {
+	top: -4vmin;
+	left: 5vmin;
+	width: 8vmin;
+	height: 8vmin;
+}
+#slide3 .slide3-cloud--2::after {
+	top: -2vmin;
+	left: 15vmin;
+	width: 7vmin;
+	height: 7vmin;
+}
+#slide3 .slide3-cloud--3 {
+	top: 8%;
+	left: 38%;
+	width: 16vmin;
+	height: 5vmin;
+	border-radius: 8vmin;
+	opacity: 0.45;
+}
+#slide3 .slide3-cloud--3::before {
+	top: -2.5vmin;
+	left: 3vmin;
+	width: 5vmin;
+	height: 5vmin;
+}
+#slide3 .slide3-cloud--3::after {
+	top: -1.5vmin;
+	left: 10vmin;
+	width: 5vmin;
+	height: 5vmin;
+}
+#slide3 .slide3-cloud--4 {
+	top: 20%;
+	left: 65%;
+	width: 20vmin;
+	height: 6vmin;
+	border-radius: 10vmin;
+	opacity: 0.4;
+}
+#slide3 .slide3-cloud--4::before {
+	top: -3vmin;
+	left: 4vmin;
+	width: 6vmin;
+	height: 6vmin;
+}
+#slide3 .slide3-cloud--4::after {
+	top: -2vmin;
+	left: 13vmin;
+	width: 6vmin;
+	height: 6vmin;
+}
+
+/* Layer cityscape */
+.cityscape-layer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 55%;
+}
+.cityscape-layer--distant {
+	opacity: 0.45;
+	z-index: 1;
+}
+.cityscape-layer--mid {
+	opacity: 0.65;
+	z-index: 2;
+}
+.cityscape-layer--foreground {
+	opacity: 0.9;
+	z-index: 3;
+}
+
+/* Jalan (road strip) */
+#slide3 .slide3-road {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 6vh;
+	background: linear-gradient(
+		90deg,
+		#6b4f3a 0%,
+		#8a7560 30%,
+		#a9a39b 60%,
+		#b8c8d0 100%
+	);
+	opacity: 0.7;
+	z-index: 4;
+}
+
+/* Mobil animasi */
+#slide3 .slide3-car {
+	position: absolute;
+	bottom: 1.5vh;
+	left: 0;
+	z-index: 5;
+	pointer-events: none;
+	opacity: 0.8;
+}
+#slide3 .slide3-car--1 {
+	animation: carMove1 28s linear infinite;
+}
+#slide3 .slide3-car--2 {
+	animation: carMove2 22s linear infinite;
+	animation-delay: -8s;
+	opacity: 0.65;
+	bottom: 3vh;
+}
+@keyframes carMove1 {
+	from {
+		transform: translateX(-10vw);
+	}
+	to {
+		transform: translateX(110vw);
+	}
+}
+@keyframes carMove2 {
+	from {
+		transform: translateX(-20vw);
+	}
+	to {
+		transform: translateX(120vw);
+	}
+}
+
+/* Overlay untuk transisi & readability area tengah */
+#slide3 .slide3-bg__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 6;
+	background:
+		linear-gradient(
+			90deg,
+			rgba(217, 108, 59, 0.3) 0%,
+			rgba(217, 108, 59, 0.12) 30%,
+			rgba(255, 255, 255, 0.05) 50%,
+			rgba(255, 255, 255, 0.05) 70%,
+			rgba(207, 232, 245, 0.3) 100%
+		),
+		linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0.1) 0%,
+			rgba(255, 255, 255, 0) 30%,
+			rgba(255, 255, 255, 0) 70%,
+			rgba(255, 255, 255, 0.2) 100%
+		);
+	pointer-events: none;
+}
+
+/* ============ KONTEN ============ */
+#slide3 .slide3-content {
+	position: relative;
+	z-index: 7;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: var(--safe-pad);
+}
+
+/* Headline utama */
+#slide3 .slide3-headline {
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: clamp(72px, 10vw, 140px);
+	line-height: 0.95;
+	letter-spacing: -0.02em;
+	color: #ffffff;
+	text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+	margin: 0 0 5vh 0;
+	max-width: 90%;
+}
+
+/* Dua kolom */
+#slide3 .slide3-duo {
+	display: flex;
+	align-items: center;
+	gap: 4vw;
+	margin-bottom: 5vh;
+}
+
+#slide3 .slide3-side {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5vh;
+	max-width: 32vw;
+}
+
+#slide3 .slide3-side--left .slide3-side__mark {
+	color: #ffb4a0;
+	font-size: clamp(48px, 7vh, 84px);
+	line-height: 1;
+}
+#slide3 .slide3-side--left .slide3-side__title {
+	font-family: var(--font-body);
+	font-weight: 700;
+	font-size: clamp(22px, 2.6vw, 36px);
+	line-height: 1.2;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin: 0;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+#slide3 .slide3-side--right .slide3-side__mark {
+	color: #7ec8b0;
+	font-size: clamp(48px, 7vh, 84px);
+	line-height: 1;
+}
+#slide3 .slide3-side--right .slide3-side__title {
+	font-family: var(--font-body);
+	font-weight: 700;
+	font-size: clamp(22px, 2.6vw, 36px);
+	line-height: 1.2;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin: 0;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Divider tipis */
+#slide3 .slide3-divider {
+	width: 2px;
+	height: 100%;
+	min-height: 30vh;
+	min-height: 30dvh;
+	background: linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.1) 0%,
+		rgba(255, 255, 255, 0.5) 50%,
+		rgba(255, 255, 255, 0.1) 100%
+	);
+}
+
+/* ============ DESCRIPTION CARD ============ */
+#slide3 .description-card {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: clamp(20px, 2.5vw, 32px);
+	background: rgba(255, 255, 255, 0.18);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	border-radius: 22px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+#slide3 .description-card p {
+	margin: 0;
+	font-family: var(--font-body);
+	font-weight: 500;
+	font-size: clamp(18px, 1.8vw, 26px);
+	line-height: 1.75;
+	color: rgba(255, 255, 255, 0.92);
+	letter-spacing: 0.01em;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#slide3 .description-card p + p {
+	margin-top: 1.25rem;
+}
+
+/* ============ RESPONSIVE — LAYAR SEMPIT / PORTRAIT ============ */
+/* Catatan patch: kondisi "orientation: portrait" murni tanpa batas lebar
+   sebelumnya membuat tablet portrait (768×1024, 820×1180) ikut memakai
+   layout mobile. Sekarang portrait-trigger dibatasi hanya untuk lebar
+   setara ponsel, sehingga tablet portrait mempertahankan layout baris
+   seperti desktop selama masih memungkinkan. */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 600px) {
+	#slide3 .slide3-headline {
+		font-size: clamp(32px, 9vw, 64px);
+		margin-bottom: 3vh;
+	}
+	#slide3 .slide3-duo {
+		flex-direction: column;
+		gap: 2.4vh;
+		margin-bottom: 3vh;
+	}
+	#slide3 .slide3-side {
+		max-width: 82vw;
+	}
+	#slide3 .slide3-divider {
+		width: 60vw;
+		height: 2px;
+		min-height: 0;
+		background: linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 0.1) 0%,
+			rgba(255, 255, 255, 0.5) 50%,
+			rgba(255, 255, 255, 0.1) 100%
+		);
+	}
+	#slide3 .description-card {
+		max-width: 92vw;
+	}
+}
+
+/* ============ RESPONSIVE — LAYAR PENDEK ============ */
+@media (max-height: 650px) {
+	#slide3 .slide3-headline {
+		font-size: clamp(28px, 7vh, 64px);
+		margin-bottom: 2vh;
+	}
+	#slide3 .slide3-duo {
+		margin-bottom: 2vh;
+		gap: 2vw;
+	}
+	#slide3 .slide3-side--left .slide3-side__mark,
+	#slide3 .slide3-side--right .slide3-side__mark {
+		font-size: clamp(28px, 5vh, 56px);
+	}
+	/* Patch: batas tambahan berbasis tinggi agar sisi kiri/kanan tidak
+	   memaksakan lebar 32vw saat tinggi layar sangat terbatas (mis.
+	   landscape ponsel 844×390 / 915×412), mengurangi risiko teks title
+	   bertabrakan dengan divider. */
+	#slide3 .slide3-side {
+		max-width: min(32vw, 40vh);
+	}
+	#slide3 .description-card {
+		padding: clamp(12px, 2vh, 24px) clamp(16px, 2.5vw, 28px);
+	}
+	#slide3 .description-card p {
+		font-size: clamp(15px, 2.4vh, 22px);
+	}
+}
+
+/* Tombol Back: definisi dasar sekarang berada di base.css (global,
+   scoped ke seluruh presentasi, bukan khusus Slide 3). Lihat
+   base.css untuk position/z-index/pointer-events yang benar. */
+
+/* ============ ENTRANCE ANIMATIONS (Slide 3) ============ */
+@keyframes slide3FadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide3FadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+#slide3.is-active .slide3-headline {
+	animation: slide3FadeUp 0.6s ease-out 0.1s both;
+}
+
+#slide3.is-active .slide3-side--left,
+#slide3.is-active .slide3-side--right {
+	animation: slide3FadeIn 0.5s ease-out 0.3s both;
+}
+
+#slide3.is-active .description-card {
+	animation: slide3FadeUp 0.5s ease-out 0.5s both;
+}
+/* Penyesuaian untuk ikon SVG pada .slide3-side__mark */
+#slide3 .slide3-side__mark svg {
+	display: block;
+	margin: 0 auto;
+}
+/* ============================================================
+   LAYOUT DUA KOLOM — JUDUL KIRI (1/3) | KONTEN KANAN (2/3)
+   ============================================================ */
+#slide3 .slide3-content {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	grid-template-areas:
+		"headline duo"
+		"headline description";
+	gap: 0 4vw;
+	align-items: center;
+	text-align: left;
+}
+
+/* Judul di kolom kiri */
+#slide3 .slide3-headline {
+	grid-area: headline;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	font-size: clamp(
+		52px,
+		6vw,
+		88px
+	); /* Ukuran disesuaikan agar muat 1/3 layar */
+	line-height: 1.05;
+}
+
+/* Baris-baris judul */
+#slide3 .slide3-headline-line {
+	display: block;
+}
+#slide3 .slide3-headline-line--2 {
+	align-self: center; /* simbol ≠ di tengah */
+}
+
+/* Duo (perbandingan) di kolom kanan bagian atas */
+#slide3 .slide3-duo {
+	grid-area: duo;
+	margin-bottom: 3vh; /* Jarak ke description-card */
+}
+
+/* Kartu deskripsi di kolom kanan bagian bawah */
+#slide3 .description-card {
+	grid-area: description;
+	max-width: 100%; /* Mengikuti lebar kolom kanan */
+	margin: 0 auto; /* Tetap center di kolomnya */
+	text-align: center; /* Pertahankan teks rata tengah di dalam kartu */
+}
+
+/* ============================================================
+   RESPONSIVE — kembali ke tata letak vertikal untuk layar kecil
+   ============================================================ */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 600px) {
+	#slide3 .slide3-content {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+	}
+
+	#slide3 .slide3-headline {
+		align-items: center;
+		font-size: clamp(32px, 9vw, 64px); /* seperti ukuran awal di mobile */
+		margin-bottom: 3vh; /* kembalikan margin bawah */
+	}
+
+	#slide3 .slide3-headline-line--2 {
+		align-self: center;
+	}
+
+	#slide3 .slide3-duo {
+		margin-bottom: 3vh;
+	}
+
+	#slide3 .description-card {
+		max-width: 92vw; /* seperti aturan awal */
+	}
+}
+/* ============================================================
+   PERBAIKAN SIMETRI JUDUL & WARNA IKON LEBIH TEGAS
+   ============================================================ */
+
+/* Buat kedua baris teks (MODERN & MELUPAKAN) rata tengah di kolom kiri */
+#slide3 .slide3-headline-line--1,
+#slide3 .slide3-headline-line--3 {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+/* Pastikan simbol ≠ juga tetap di tengah */
+#slide3 .slide3-headline-line--2 {
+	display: block;
+	width: 100%;
+	text-align: center;
+	align-self: center;
+}
+
+/* Warna ikon kiri (×) menjadi lebih gelap dan kontras */
+#slide3 .slide3-side--left .slide3-side__mark {
+	color: #a93226; /* merah gelap */
+}
+
+/* Warna ikon kanan (centang) menjadi lebih gelap dan kontras */
+#slide3 .slide3-side--right .slide3-side__mark {
+	color: #1e7a5c; /* hijau gelap */
+}
+
+/* Opsional: pertebal garis ikon agar lebih terlihat */
+#slide3 .slide3-side__mark svg {
+	stroke-width: 2.4;
+}
+/* Warna teks deskripsi menjadi gelap agar mudah dibaca */
+#slide3 .description-card p {
+	color: #3a2c22; /* cokelat tua hangat */
+	text-shadow: 0 1px 4px rgba(255, 255, 255, 0.3); /* bayangan halus untuk keterbacaan */
+}
+/* ============================================================
+   PERBAIKAN JUDUL: GRADASI + SHADOW + ANIMASI PER BARIS
+   ============================================================ */
+#slide3 .slide3-headline {
+	font-family: var(--font-body);
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	color: #ffffff;
+	text-shadow:
+		0 2px 12px rgba(0, 0, 0, 0.6),
+		0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Baris pertama: gradasi oranye */
+#slide3 .slide3-headline-line--1 {
+	background: linear-gradient(135deg, #ffb347 0%, #ff8c42 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent; /* fallback */
+}
+
+/* Baris kedua: simbol ≠ putih bersinar */
+#slide3 .slide3-headline-line--2 {
+	color: #ffffff;
+	text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+}
+
+/* Baris ketiga: gradasi biru muda */
+#slide3 .slide3-headline-line--3 {
+	background: linear-gradient(135deg, #a8d8ff 0%, #6ab7f5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent; /* fallback */
+}
+
+/* Animasi muncul per baris saat slide aktif */
+@keyframes slide3HeadlineLineIn {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+#slide3.is-active .slide3-headline-line--1 {
+	animation: slide3HeadlineLineIn 0.7s ease-out 0.1s both;
+}
+#slide3.is-active .slide3-headline-line--2 {
+	animation: slide3HeadlineLineIn 0.7s ease-out 0.35s both;
+}
+#slide3.is-active .slide3-headline-line--3 {
+	animation: slide3HeadlineLineIn 0.7s ease-out 0.6s both;
+}
+
+/* ============================================================
+   MOBIL TAMBAHAN (3 & 4)
+   ============================================================ */
+/* Mobil 3: kecil, kiri ke kanan, lebih lambat */
+#slide3 .slide3-car--3 {
+	animation: carMove3 34s linear infinite;
+	animation-delay: -15s;
+	opacity: 0.6;
+	bottom: 2.2vh;
+}
+@keyframes carMove3 {
+	from {
+		transform: translateX(-15vw);
+	}
+	to {
+		transform: translateX(110vw);
+	}
+}
+
+/* Mobil 4: sedang, kanan ke kiri */
+#slide3 .slide3-car--4 {
+	animation: carMove4 26s linear infinite;
+	animation-delay: -5s;
+	opacity: 0.75;
+	bottom: 1.8vh;
+}
+@keyframes carMove4 {
+	from {
+		transform: translateX(110vw) scaleX(-1);
+	}
+	to {
+		transform: translateX(-15vw) scaleX(-1);
+	}
+}
+
+/* ============================================================
+   BURUNG & PESAWAT
+   ============================================================ */
+/* Burung */
+#slide3 .slide3-bird {
+	position: absolute;
+	z-index: 2;
+	pointer-events: none;
+	opacity: 0.7;
+}
+
+#slide3 .slide3-bird--1 {
+	top: 12%;
+	left: 25%;
+	animation: birdFloat1 12s ease-in-out infinite;
+}
+#slide3 .slide3-bird--2 {
+	top: 18%;
+	left: 15%;
+	animation: birdFloat2 15s ease-in-out infinite;
+	animation-delay: 2s;
+}
+#slide3 .slide3-bird--3 {
+	top: 9%;
+	left: 45%;
+	animation: birdFloat1 18s ease-in-out infinite;
+	animation-delay: 4s;
+}
+
+@keyframes birdFloat1 {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	50% {
+		transform: translateY(-10px) rotate(-3deg);
+	}
+}
+@keyframes birdFloat2 {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg) scale(0.8);
+	}
+	50% {
+		transform: translateY(-15px) rotate(5deg) scale(0.8);
+	}
+}
+
+/* Pesawat */
+#slide3 .slide3-plane {
+	position: absolute;
+	top: 5%;
+	left: -10%;
+	z-index: 2;
+	pointer-events: none;
+	opacity: 0.9;
+	animation: planeFly 40s linear infinite;
+	animation-delay: 5s;
+}
+
+@keyframes planeFly {
+	0% {
+		transform: translateX(0) translateY(0) rotate(2deg);
+	}
+	100% {
+		transform: translateX(130vw) translateY(-15vh) rotate(-1deg);
+	}
+}
+
+/* ============================================================
+   RESPONSIVE: pada layar kecil, sederhanakan elemen baru
+   ============================================================ */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 600px) {
+	/* Burung & pesawat tetap boleh tampil, tapi lebih halus */
+	#slide3 .slide3-bird--2 {
+		display: none; /* sembunyikan burung tengah agar tidak penuh */
+	}
+	#slide3 .slide3-plane {
+		animation-duration: 50s; /* lebih lambat */
+	}
+	/* Mobil tambahan tetap jalan, tapi kurangi opacity */
+	#slide3 .slide3-car--3 {
+		opacity: 0.5;
+	}
+	#slide3 .slide3-car--4 {
+		opacity: 0.65;
+	}
+}
+/* ============================================================
+   REVISI WARNA JUDUL — TUKAR GRADASI & GLOW MODERN
+   ============================================================ */
+
+/* MODERN: gradasi biru muda + glow tipis */
+#slide3 .slide3-headline-line--1 {
+	background: linear-gradient(135deg, #b3d9ff 0%, #6ab7f5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow:
+		0 0 8px rgba(106, 183, 245, 0.5),
+		0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* MELUPAKAN: gradasi oranye + glow hangat */
+#slide3 .slide3-headline-line--3 {
+	background: linear-gradient(135deg, #ffb347 0%, #ff8c42 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow:
+		0 0 14px rgba(255, 140, 66, 0.6),
+		0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Simbol ≠: pertahankan putih bersinar, mungkin sedikit lebih lembut */
+#slide3 .slide3-headline-line--2 {
+	text-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+}
+/* ============================================================
+   EFEK 3D EXTRUSION — JUDUL SLIDE 3 (OPSI 2)
+   ============================================================ */
+
+/* MODERN — ekstrusi biru gelap */
+#slide3 .slide3-headline-line--1 {
+	text-shadow:
+		0 0 8px rgba(106, 183, 245, 0.35),
+		1px 1px 0 #1a4f7a,
+		2px 2px 0 #1a4f7a,
+		3px 3px 0 #17466b,
+		4px 4px 0 #143d5d,
+		5px 5px 0 #10344e,
+		6px 6px 0 #0d2b41,
+		7px 7px 0 #092134,
+		8px 8px 0 #061827,
+		10px 10px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* MELUPAKAN — ekstrusi oranye tua */
+#slide3 .slide3-headline-line--3 {
+	text-shadow:
+		0 0 10px rgba(255, 140, 66, 0.45),
+		1px 1px 0 #b35c1e,
+		2px 2px 0 #a5521a,
+		3px 3px 0 #944816,
+		4px 4px 0 #833f12,
+		5px 5px 0 #71360f,
+		6px 6px 0 #5f2d0c,
+		7px 7px 0 #4d240a,
+		8px 8px 0 #3b1b07,
+		10px 10px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Simbol ≠ — ekstrusi netral gelap */
+#slide3 .slide3-headline-line--2 {
+	text-shadow:
+		0 0 12px rgba(255, 255, 255, 0.7),
+		1px 1px 0 #8a9bb0,
+		2px 2px 0 #7a8ba0,
+		3px 3px 0 #6a7b90,
+		4px 4px 0 #5a6b80,
+		5px 5px 0 #4a5b70,
+		6px 6px 0 #3a4b60,
+		7px 7px 0 #2a3b50,
+		8px 8px 0 #1a2b40,
+		10px 10px 12px rgba(0, 0, 0, 0.25);
+}
+/* ============================================================
+   ANIMASI IDLE — JUDUL MENGAMBANG HALUS SAAT SLIDE AKTIF
+   Diterapkan pada .slide3-headline (keseluruhan) agar tidak
+   bentrok dengan animasi entrance per baris.
+   ============================================================ */
+
+@keyframes slide3HeadlineIdle {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+#slide3.is-active .slide3-headline {
+	animation: slide3HeadlineIdle 6s ease-in-out 1s infinite;
+}
+
+/* Opsional: tambahkan rotasi sangat halus untuk kesan organik */
+@keyframes slide3HeadlineIdleRotate {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	50% {
+		transform: translateY(-6px) rotate(-0.3deg);
+	}
+}
+
+/* Jika ingin versi dengan rotasi, ganti animation menjadi:
+   animation: slide3HeadlineIdleRotate 7s ease-in-out 1s infinite;
+*/
+
+@media (prefers-reduced-motion: reduce) {
+	#slide3.is-active .slide3-headline {
+		animation: none;
+	}
+}
+/* ============================================================
+   REVISI JUDUL SLIDE 3 — GRADASI PUTIH/HITAM + IDLE LEBIH TERASA
+   ============================================================ */
+
+/* MODERN — gradasi biru ke putih */
+#slide3 .slide3-headline-line--1 {
+	background: linear-gradient(135deg, #ffffff 0%, #b3d9ff 45%, #6ab7f5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow:
+		0 0 8px rgba(106, 183, 245, 0.35),
+		1px 1px 0 #1a4f7a,
+		2px 2px 0 #1a4f7a,
+		3px 3px 0 #17466b,
+		4px 4px 0 #143d5d,
+		5px 5px 0 #10344e,
+		6px 6px 0 #0d2b41,
+		7px 7px 0 #092134,
+		8px 8px 0 #061827,
+		10px 10px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* MELUPAKAN — gradasi oranye ke hitam */
+#slide3 .slide3-headline-line--3 {
+	background: linear-gradient(135deg, #ffb347 0%, #ff8c42 55%, #2d1a0e 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow:
+		0 0 10px rgba(255, 140, 66, 0.45),
+		1px 1px 0 #b35c1e,
+		2px 2px 0 #a5521a,
+		3px 3px 0 #944816,
+		4px 4px 0 #833f12,
+		5px 5px 0 #71360f,
+		6px 6px 0 #5f2d0c,
+		7px 7px 0 #4d240a,
+		8px 8px 0 #3b1b07,
+		10px 10px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animasi idle lebih terasa */
+@keyframes slide3HeadlineIdle {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	25% {
+		transform: translateY(-12px) rotate(-0.8deg);
+	}
+	75% {
+		transform: translateY(-12px) rotate(0.8deg);
+	}
+}
+
+#slide3.is-active .slide3-headline {
+	animation: slide3HeadlineIdle 4.5s ease-in-out 1.2s infinite;
+}
+
+/* Matikan animasi idle jika pengguna mengurangi gerakan */
+@media (prefers-reduced-motion: reduce) {
+	#slide3.is-active .slide3-headline {
+		animation: none;
+	}
+}
+/* ============================================================
+   REVISI JUDUL SLIDE 3 — GRADASI TERLIHAT + EKSTRUSI 3D
+   Menggunakan filter drop-shadow agar gradasi tidak tertutup.
+   ============================================================ */
+
+/* MODERN — gradasi putih ke biru, drop-shadow biru tua */
+#slide3 .slide3-headline-line--1 {
+	background: linear-gradient(135deg, #ffffff 0%, #b3d9ff 45%, #6ab7f5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow: none; /* nonaktifkan text-shadow */
+	filter: drop-shadow(1px 1px 0 #1a4f7a) drop-shadow(2px 2px 0 #17466b)
+		drop-shadow(3px 3px 0 #143d5d) drop-shadow(4px 4px 0 #10344e)
+		drop-shadow(5px 5px 0 #0d2b41) drop-shadow(6px 6px 0 #092134)
+		drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.25));
+}
+
+/* MELUPAKAN — gradasi oranye ke hitam, drop-shadow oranye tua */
+#slide3 .slide3-headline-line--3 {
+	background: linear-gradient(135deg, #ffb347 0%, #ff8c42 55%, #2d1a0e 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	text-shadow: none;
+	filter: drop-shadow(1px 1px 0 #b35c1e) drop-shadow(2px 2px 0 #a5521a)
+		drop-shadow(3px 3px 0 #944816) drop-shadow(4px 4px 0 #833f12)
+		drop-shadow(5px 5px 0 #71360f) drop-shadow(6px 6px 0 #5f2d0c)
+		drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.3));
+}
+
+/* Simbol ≠ — tetap putih, drop-shadow netral */
+#slide3 .slide3-headline-line--2 {
+	text-shadow: none;
+	filter: drop-shadow(1px 1px 0 #8a9bb0) drop-shadow(2px 2px 0 #7a8ba0)
+		drop-shadow(3px 3px 0 #6a7b90) drop-shadow(4px 4px 0 #5a6b80)
+		drop-shadow(5px 5px 0 #4a5b70)
+		drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.2));
+}
+
+/* Animasi idle lebih terasa */
+@keyframes slide3HeadlineIdle {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	25% {
+		transform: translateY(-14px) rotate(-0.8deg);
+	}
+	75% {
+		transform: translateY(-14px) rotate(0.8deg);
+	}
+}
+
+#slide3.is-active .slide3-headline {
+	animation: slide3HeadlineIdle 3.8s ease-in-out 1s infinite;
+}
+
+/* Matikan animasi idle jika pengguna mengurangi gerakan */
+@media (prefers-reduced-motion: reduce) {
+	#slide3.is-active .slide3-headline {
+		animation: none;
+	}
+}
+/* ============================================================
+   PERBAIKAN RESPONSIVE JUDUL SLIDE 3
+   Mencegah huruf terpotong / tertimpa di layar kecil
+   ============================================================ */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 600px) {
+	/* Kecilkan offset drop-shadow agar tidak melebar */
+	#slide3 .slide3-headline-line--1 {
+		filter: drop-shadow(1px 1px 0 #1a4f7a) drop-shadow(2px 2px 0 #17466b)
+			drop-shadow(3px 3px 0 #143d5d) drop-shadow(4px 4px 0 #10344e)
+			drop-shadow(5px 5px 8px rgba(0, 0, 0, 0.2));
+	}
+
+	#slide3 .slide3-headline-line--3 {
+		filter: drop-shadow(1px 1px 0 #b35c1e) drop-shadow(2px 2px 0 #a5521a)
+			drop-shadow(3px 3px 0 #944816) drop-shadow(4px 4px 0 #833f12)
+			drop-shadow(5px 5px 8px rgba(0, 0, 0, 0.2));
+	}
+
+	#slide3 .slide3-headline-line--2 {
+		filter: drop-shadow(1px 1px 0 #8a9bb0) drop-shadow(2px 2px 0 #7a8ba0)
+			drop-shadow(3px 3px 0 #6a7b90)
+			drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.15));
+	}
+
+	/* Animasi idle lebih tenang di layar kecil */
+	#slide3.is-active .slide3-headline {
+		animation: slide3HeadlineIdleMobile 5s ease-in-out 1s infinite;
+	}
+
+	@keyframes slide3HeadlineIdleMobile {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0deg);
+		}
+		50% {
+			transform: translateY(-6px) rotate(-0.4deg);
+		}
+	}
+
+	/* Pastikan tidak ada overflow horizontal */
+	#slide3 .slide3-content {
+		overflow: visible;
+	}
+}
+/* ============================================================
+   PERBAIKAN RESPONSIVE JUDUL — UKURAN LEBIH KECIL
+   Mencegah huruf terpotong/tertimpa di layar sempit
+   ============================================================ */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 600px) {
+	#slide3 .slide3-headline {
+		font-size: clamp(22px, 7.5vw, 44px) !important;
+		line-height: 1.2;
+		margin-bottom: 2.5vh;
+	}
+
+	/* Kurangi jarak antar baris agar tetap kompak */
+	#slide3 .slide3-headline-line {
+		letter-spacing: 0.01em;
+	}
+
+	/* Jika masih terpotong, drop-shadow bisa dikurangi lebih jauh */
+	#slide3 .slide3-headline-line--1,
+	#slide3 .slide3-headline-line--3 {
+		filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.4))
+			drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.3))
+			drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.2));
+	}
+}
+/* ============================================================
+   ANIMASI IDLE BARU — GELOMBANG PER BARIS + KILAUAN CAHAYA
+   ============================================================ */
+
+/* Matikan animasi container lama */
+#slide3.is-active .slide3-headline {
+  animation: none;
+}
+
+/* Siapkan latar ganda: gradasi warna dasar + sheen kilau */
+#slide3 .slide3-headline-line {
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 220% 100%;
+  background-position: 0 0, -220% 0;
+}
+
+/* MODERN: gradasi + sheen */
+#slide3 .slide3-headline-line--1 {
+  background-image:
+    linear-gradient(135deg, #ffffff 0%, #b3d9ff 45%, #6ab7f5 100%),
+    linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+}
+
+/* Simbol ≠: tetap putih + sheen lembut */
+#slide3 .slide3-headline-line--2 {
+  background-image:
+    linear-gradient(135deg, #ffffff 0%, #ffffff 100%),
+    linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+}
+
+/* MELUPAKAN: gradasi + sheen */
+#slide3 .slide3-headline-line--3 {
+  background-image:
+    linear-gradient(135deg, #ffb347 0%, #ff8c42 55%, #2d1a0e 100%),
+    linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%);
+}
+
+/* Animasi gelombang per baris */
+@keyframes slide3Wave {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-9px) rotate(-0.5deg);
+  }
+  70% {
+    transform: translateY(-9px) rotate(0.5deg);
+  }
+}
+
+/* Animasi kilauan melintas */
+@keyframes slide3Sheen {
+  0%, 40% {
+    background-position: 0 0, -220% 0;
+  }
+  60%, 100% {
+    background-position: 0 0, 220% 0;
+  }
+}
+
+/* Terapkan animasi pada tiap baris dengan delay berbeda */
+#slide3.is-active .slide3-headline-line--1 {
+  animation:
+    slide3Wave 5.5s ease-in-out 0s infinite,
+    slide3Sheen 6s linear 0s infinite;
+}
+#slide3.is-active .slide3-headline-line--2 {
+  animation:
+    slide3Wave 5.8s ease-in-out 0.25s infinite,
+    slide3Sheen 6.5s linear 0.4s infinite;
+}
+#slide3.is-active .slide3-headline-line--3 {
+  animation:
+    slide3Wave 5.2s ease-in-out 0.5s infinite,
+    slide3Sheen 6.2s linear 0.8s infinite;
+}
+
+/* Nonaktifkan animasi jika pengguna mengurangi gerakan */
+@media (prefers-reduced-motion: reduce) {
+  #slide3.is-active .slide3-headline-line--1,
+  #slide3.is-active .slide3-headline-line--2,
+  #slide3.is-active .slide3-headline-line--3 {
+    animation: none;
+  }
+}
+/* ============================================================
+   PERBAIKAN SIMBOL ≠ — HILANGKAN KOTAK PUTIH
+   ============================================================ */
+#slide3 .slide3-headline-line--2 {
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  background: none !important;
+  filter: none !important;
+  text-shadow:
+    0 0 14px rgba(255, 255, 255, 0.9),
+    0 0 30px rgba(255, 255, 255, 0.5) !important;
+}

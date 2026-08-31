@@ -1,0 +1,933 @@
+/* ============================================================
+   SLIDE 6 — GOTONG ROYONG DI ERA DIGITAL
+   v4: LAYOUT DIRAPIKAN — flexbox, tanpa tumpang tindih
+   Semua elemen (judul, subjudul, HP, popup dock, flow,
+   deskripsi, stage navigator, chess background) dipertahankan.
+   ============================================================ */
+#slide6 {
+	--s6-bg-1: #f6f4f0;
+	--s6-bg-2: #eae7f0;
+	--s6-bg-3: #dfe6f0;
+	--s6-ink: #1e2a3a;
+	--s6-muted: #4a5a6a;
+	--s6-accent: #1e6fd9;
+	--s6-accent-soft: #8fc0ef;
+	--s6-accent-warm: #ff8a3d;
+	--s6-card-bg: rgba(255, 255, 255, 0.7);
+	--s6-card-border: rgba(255, 255, 255, 0.4);
+	--s6-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+	--s6-piece-ivory: #efe6d2;
+	--s6-piece-graphite: #4a5568;
+	--s6-piece-blue-gray: #64758a;
+	background:
+		radial-gradient(
+			circle at 15% 30%,
+			rgba(255, 255, 255, 0.7) 0%,
+			transparent 45%
+		),
+		radial-gradient(
+			circle at 85% 70%,
+			rgba(200, 210, 230, 0.5) 0%,
+			transparent 50%
+		),
+		linear-gradient(
+			145deg,
+			var(--s6-bg-1) 0%,
+			var(--s6-bg-2) 55%,
+			var(--s6-bg-3) 100%
+		);
+	overflow: hidden;
+}
+
+/* ============================================================
+   BACKGROUND base layer (tidak diubah)
+   ============================================================ */
+#slide6 .slide6-bg {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	opacity: 0.8;
+}
+#slide6 .slide6-bg::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image:
+		radial-gradient(
+			circle at 20% 30%,
+			rgba(30, 111, 217, 0.08) 0 3px,
+			transparent 4px
+		),
+		radial-gradient(
+			circle at 70% 20%,
+			rgba(30, 111, 217, 0.06) 0 2px,
+			transparent 3px
+		),
+		radial-gradient(
+			circle at 40% 80%,
+			rgba(30, 111, 217, 0.07) 0 4px,
+			transparent 5px
+		),
+		radial-gradient(
+			circle at 90% 60%,
+			rgba(30, 111, 217, 0.05) 0 2px,
+			transparent 3px
+		);
+	background-size: 120px 120px;
+	mask-image: linear-gradient(
+		180deg,
+		transparent 0%,
+		black 50%,
+		transparent 100%
+	);
+}
+#slide6 .slide6-bg .slide6-community-ring {
+	position: absolute;
+	border-radius: 50%;
+	border: 1px solid rgba(30, 111, 217, 0.1);
+	box-shadow: 0 0 20px rgba(30, 111, 217, 0.05);
+}
+#slide6 .slide6-community-ring--1 {
+	width: 40vmin;
+	height: 40vmin;
+	top: 10%;
+	left: 5%;
+}
+#slide6 .slide6-community-ring--2 {
+	width: 55vmin;
+	height: 55vmin;
+	bottom: 5%;
+	right: 10%;
+	border-color: rgba(255, 138, 61, 0.1);
+	box-shadow: 0 0 20px rgba(255, 138, 61, 0.05);
+}
+#slide6 .slide6-community-ring--3 {
+	width: 28vmin;
+	height: 28vmin;
+	top: 40%;
+	left: 45%;
+	border-color: rgba(30, 111, 217, 0.08);
+}
+#slide6 .slide6-bg .slide6-float {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 50%;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+	animation: s6Float 8s ease-in-out infinite;
+}
+#slide6 .slide6-float--1 {
+	width: 8px;
+	height: 8px;
+	top: 20%;
+	left: 15%;
+}
+#slide6 .slide6-float--2 {
+	width: 12px;
+	height: 12px;
+	top: 30%;
+	right: 20%;
+	animation-delay: 1.5s;
+}
+#slide6 .slide6-float--3 {
+	width: 6px;
+	height: 6px;
+	bottom: 25%;
+	left: 70%;
+	animation-delay: 3s;
+}
+@keyframes s6Float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-8px);
+	}
+}
+
+/* ============================================================
+   Chess pieces + chess board (tidak diubah)
+   ============================================================ */
+#slide6 .slide6-chess-pieces {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	overflow: hidden;
+}
+#slide6 .slide6-chess-piece {
+	position: absolute;
+	left: var(--x, 50%);
+	top: var(--y, 50%);
+	width: calc(30px * var(--s, 1));
+	height: auto;
+	color: var(--tone, var(--s6-piece-graphite));
+	opacity: var(--o, 0.4);
+	filter: drop-shadow(0 6px 10px rgba(30, 42, 58, 0.18));
+	animation: s6PieceFloat var(--dur, 12s) ease-in-out infinite;
+	animation-delay: var(--delay, 0s);
+	transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+	will-change: transform;
+}
+@keyframes s6PieceFloat {
+	0% {
+		transform: translate(-50%, -50%) translateY(0)
+			rotate(calc(var(--rot, 0deg) - 3deg));
+	}
+	50% {
+		transform: translate(-50%, -50%) translateY(-12px)
+			rotate(calc(var(--rot, 0deg) + 3deg));
+	}
+	100% {
+		transform: translate(-50%, -50%) translateY(0)
+			rotate(calc(var(--rot, 0deg) - 3deg));
+	}
+}
+#slide6 .slide6-piece-links {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	opacity: 0.35;
+}
+#slide6 .slide6-piece-links path {
+	fill: none;
+	stroke: url(#s6LinkGrad);
+	stroke-width: 1;
+	stroke-dasharray: 2 5;
+}
+
+#slide6 .slide6-chess-board {
+	position: absolute;
+	left: 50%;
+	bottom: -6vh;
+	transform: translateX(-50%);
+	width: min(94vw, 1500px);
+	height: clamp(110px, 20vh, 240px);
+	perspective: 600px;
+	perspective-origin: 50% 0%;
+	z-index: 1;
+	pointer-events: none;
+	-webkit-mask-image: linear-gradient(
+		180deg,
+		transparent 0%,
+		rgba(0, 0, 0, 0.35) 30%,
+		rgba(0, 0, 0, 0.8) 65%,
+		black 100%
+	);
+	mask-image: linear-gradient(
+		180deg,
+		transparent 0%,
+		rgba(0, 0, 0, 0.35) 30%,
+		rgba(0, 0, 0, 0.8) 65%,
+		black 100%
+	);
+}
+#slide6 .slide6-chess-board__surface {
+	position: absolute;
+	inset: 0;
+	border-radius: 8px;
+	transform: rotateX(60deg);
+	transform-origin: bottom center;
+	background-color: rgba(255, 253, 247, 0.55);
+	background-image:
+		linear-gradient(45deg, rgba(74, 90, 110, 0.32) 25%, transparent 25%),
+		linear-gradient(-45deg, rgba(74, 90, 110, 0.32) 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, rgba(74, 90, 110, 0.32) 75%),
+		linear-gradient(-45deg, transparent 75%, rgba(74, 90, 110, 0.32) 75%);
+	background-size: 12.5% 26%;
+	background-position:
+		0 0,
+		0 13%,
+		6.25% -13%,
+		-6.25% 0;
+	box-shadow: 0 0 50px rgba(30, 42, 58, 0.06);
+	opacity: 0.6;
+}
+#slide6 .slide6-chess-board::before {
+	content: "";
+	position: absolute;
+	top: -1px;
+	left: 6%;
+	right: 6%;
+	height: 2px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.65),
+		transparent
+	);
+	filter: blur(1px);
+}
+
+/* ============================================================
+   MAIN CONTENT LAYOUT
+   Struktur: header (atas, statis) → stage-area (flex, mengisi
+   sisa ruang) → stage navigator (absolute, pojok kiri bawah).
+   Tidak ada lagi transform/absolute yang saling menimpa.
+   ============================================================ */
+#slide6 .slide6-content {
+	position: relative;
+	z-index: 2;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: flex-start;
+	padding: var(--safe-pad) 4vw;
+	gap: 1.2vh;
+}
+
+#slide6 .slide6-header {
+	flex: 0 0 auto;
+	text-align: center;
+	max-width: 900px;
+	margin: 0 auto;
+}
+#slide6 .slide6-title {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(28px, 4.2vw, 60px);
+	line-height: 1.15;
+	color: var(--s6-ink);
+	letter-spacing: -0.01em;
+	margin: 0;
+}
+#slide6 .slide6-subtitle {
+	font-family: var(--font-body);
+	font-weight: 500;
+	font-size: clamp(16px, 1.8vw, 24px);
+	color: var(--s6-muted);
+	margin: 0.8vh auto 0;
+	max-width: 640px;
+}
+
+/* ---- Stage area: HP + dock di kanan, flow di bawah HP,
+        deskripsi di kiri HP. Satu baris flex, tanpa overlap. ---- */
+#slide6 .slide6-stage-area {
+	position: relative;
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(28px, 5vw, 72px);
+	padding: 0 2vw;
+	/* ruang cadangan di kanan agar popup dock (menempel di kanan HP)
+	   tidak pernah menutupi deskripsi atau terpotong di tepi layar */
+	padding-right: clamp(200px, 18vw, 300px);
+}
+
+#slide6 .slide6-phone {
+	position: relative;
+	flex: 0 0 auto;
+	width: clamp(200px, 18vw, 300px);
+	aspect-ratio: 9/19;
+	pointer-events: none;
+	z-index: 5;
+}
+#slide6 .slide6-phone__body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 30px;
+	background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
+	box-shadow:
+		0 25px 50px rgba(0, 0, 0, 0.3),
+		inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+	overflow: hidden;
+}
+#slide6 .slide6-phone__notch {
+	position: absolute;
+	top: 8px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 70px;
+	height: 14px;
+	border-radius: 10px;
+	background: #000;
+	z-index: 2;
+}
+#slide6 .slide6-phone__screen {
+	position: absolute;
+	inset: 12px;
+	border-radius: 22px;
+	background: #f0f2f5;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	transition: box-shadow 0.5s ease;
+}
+#slide6 .slide6-phone[data-stage-visual="1"].is-visible .slide6-phone__screen {
+	box-shadow: inset 0 0 20px rgba(30, 111, 217, 0.15);
+}
+#slide6 .slide6-phone[data-stage-visual="4"].is-visible .slide6-phone__screen {
+	box-shadow: inset 0 0 30px rgba(30, 111, 217, 0.25);
+}
+#slide6 .slide6-chat {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+#slide6 .slide6-chat__header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 12px;
+	background: #fff;
+	border-bottom: 1px solid #e0e0e0;
+}
+#slide6 .slide6-chat__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #4caf50;
+}
+#slide6 .slide6-chat__name {
+	flex: 1;
+	font-weight: 600;
+	font-size: 14px;
+	color: #333;
+}
+#slide6 .slide6-chat__members {
+	font-size: 12px;
+	color: #666;
+}
+#slide6 .slide6-chat__img {
+	flex: 1;
+	background: #ddd;
+}
+#slide6 .slide6-chat__img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+#slide6 .slide6-chat__input {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px;
+	background: #fff;
+	border-top: 1px solid #e0e0e0;
+}
+#slide6 .slide6-chat__input-placeholder {
+	flex: 1;
+	color: #999;
+	font-size: 14px;
+}
+#slide6 .slide6-chat__send {
+	color: var(--s6-accent);
+	font-size: 18px;
+}
+
+/* connector kecil dari HP: satu ke kanan (popup dock),
+   satu ke bawah (digital collaboration flow) */
+#slide6 .slide6-phone::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 100%;
+	transform: translateX(-50%);
+	width: 1px;
+	height: clamp(14px, 2.4vh, 32px);
+	background: linear-gradient(180deg, rgba(30, 111, 217, 0.4), transparent);
+	opacity: 0.55;
+	pointer-events: none;
+}
+#slide6 .slide6-phone::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	width: clamp(14px, 2.4vw, 32px);
+	height: 1px;
+	background: linear-gradient(90deg, transparent, rgba(30, 111, 217, 0.4));
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+/* ============================================================
+   POPUPS — menempel di KANAN HP (ruangnya sudah dicadangkan
+   lewat padding-right di .slide6-stage-area)
+   ============================================================ */
+#slide6 .slide6-popup-dock {
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	transform: translateY(-50%);
+	margin-left: clamp(14px, 2.6vw, 34px);
+	width: clamp(168px, 15vw, 226px);
+	max-width: calc(40vw - 24px);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	z-index: 6;
+	pointer-events: none;
+}
+.slide6-popup {
+	position: relative;
+	background: var(--s6-card-bg);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid var(--s6-card-border);
+	border-radius: 16px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+	padding: 0 14px;
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+	transform: translateY(10px) scale(0.98);
+	transition:
+		opacity 0.45s ease,
+		transform 0.45s ease,
+		max-height 0.45s ease,
+		padding 0.45s ease;
+	pointer-events: none;
+}
+.slide6-popup.is-visible {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	max-height: 220px;
+	padding: 12px 14px;
+	pointer-events: auto;
+}
+.slide6-popup__header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 6px;
+}
+.slide6-popup__dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #4caf50;
+}
+.slide6-popup__icon {
+	font-size: 16px;
+}
+.slide6-popup__title {
+	flex: 1;
+}
+.slide6-popup__time {
+	font-size: 11px;
+	color: #888;
+}
+.slide6-popup__avatar-group {
+	display: flex;
+	align-items: center;
+	gap: -6px;
+	margin: 6px 0;
+}
+.slide6-popup__avatar-group .avatar {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #cbd5e1;
+	border: 2px solid white;
+}
+.slide6-popup__more {
+	font-size: 12px;
+	color: #666;
+	background: white;
+	border-radius: 10px;
+	padding: 2px 6px;
+}
+.slide6-popup__text {
+	font-size: 13px;
+	color: #444;
+}
+.slide6-popup__task-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: #333;
+	margin: 4px 0;
+}
+.slide6-popup__task-item .check {
+	width: 16px;
+	height: 16px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background: #e0e7ff;
+	color: #1e6fd9;
+	font-size: 12px;
+}
+.slide6-popup__progress {
+	height: 4px;
+	background: #e5e7eb;
+	border-radius: 2px;
+	margin-top: 6px;
+	overflow: hidden;
+}
+.slide6-popup__progress span {
+	display: block;
+	height: 100%;
+	background: #1e6fd9;
+	border-radius: 2px;
+}
+
+/* network SVG (phone stage-4, tidak diubah) */
+.slide6-network {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.6s ease;
+	z-index: 4;
+}
+.slide6-network.is-visible {
+	opacity: 0.7;
+}
+
+/* ============================================================
+   DIGITAL COLLABORATION FLOW — sekarang menempel di BAWAH HP
+   (bukan di kiri lagi), supaya kolom kiri bisa dipakai penuh
+   oleh deskripsi tanpa berebut ruang.
+   ============================================================ */
+#slide6 .slide6-flow {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: clamp(18px, 2.6vh, 34px);
+	width: clamp(230px, 30vw, 380px);
+	min-height: clamp(64px, 8vh, 96px);
+	z-index: 3;
+	pointer-events: none;
+}
+#slide6 .flow-stage {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	opacity: 0;
+	transform: translateY(8px) scale(0.96);
+	transition:
+		opacity 0.6s ease,
+		transform 0.6s ease;
+	pointer-events: none;
+}
+#slide6 .flow-stage.is-active {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	pointer-events: auto;
+}
+#slide6 .flow-card {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	background: var(--s6-card-bg);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid var(--s6-card-border);
+	border-radius: 12px;
+	padding: 7px 10px;
+	font-family: var(--font-body);
+	font-size: 12px;
+	color: #333;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+	white-space: nowrap;
+}
+#slide6 .flow-card svg {
+	width: 14px;
+	height: 14px;
+	flex: 0 0 auto;
+	color: var(--s6-accent);
+}
+#slide6 .flow-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #4caf50;
+	flex: 0 0 auto;
+}
+#slide6 .flow-avatars {
+	display: flex;
+}
+#slide6 .flow-avatars .avatar {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #cbd5e1;
+	border: 2px solid white;
+	margin-left: -6px;
+}
+#slide6 .flow-avatars .avatar:first-child {
+	margin-left: 0;
+}
+#slide6 .flow-check {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #e0e7ff;
+	color: #1e6fd9;
+	font-size: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+}
+#slide6 .flow-circle-empty {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1.5px solid #9aa8bd;
+	flex: 0 0 auto;
+}
+#slide6 .flow-progress {
+	width: 60px;
+	height: 4px;
+	border-radius: 2px;
+	background: #e5e7eb;
+	overflow: hidden;
+}
+#slide6 .flow-progress span {
+	display: block;
+	height: 100%;
+	background: var(--s6-accent);
+	border-radius: 2px;
+}
+#slide6 .flow-stage[data-stage-flow="4"] .flow-card {
+	box-shadow:
+		0 0 0 1px rgba(30, 111, 217, 0.15),
+		0 8px 18px rgba(30, 111, 217, 0.12);
+}
+
+/* ============================================================
+   DESKRIPSI — flex item di KIRI HP (order:-1), rata kiri,
+   tidak lagi absolute/transform sehingga tidak pernah menimpa
+   HP atau header.
+   ============================================================ */
+#slide6 .slide6-desc {
+	order: -1;
+	flex: 0 1 380px;
+	max-width: 380px;
+	text-align: left;
+	z-index: 6;
+}
+#slide6 .slide6-text {
+	display: none;
+	opacity: 0;
+	transform: translateY(10px);
+	transition:
+		opacity 0.5s ease,
+		transform 0.5s ease;
+}
+#slide6 .slide6-text.is-active {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+#slide6 .slide6-text h3 {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(22px, 2.6vw, 36px);
+	color: var(--s6-ink);
+	margin: 0 0 0.5vh 0;
+	letter-spacing: 0.02em;
+}
+#slide6 .slide6-text p {
+	font-family: var(--font-body);
+	font-weight: 400;
+	font-size: clamp(15px, 1.3vw, 19px);
+	line-height: 1.6;
+	color: var(--s6-muted);
+	margin: 0;
+	max-width: 100%;
+}
+
+/* ============================================================
+   STAGE NAVIGATOR — pojok kiri BAWAH (sesuai permintaan),
+   di atas tombol Back/Next global, tidak pernah tertutup.
+   ============================================================ */
+#slide6 .slide6-stages {
+	position: absolute;
+	left: clamp(14px, 2.6vw, 34px);
+	bottom: clamp(64px, 10vh, 104px);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0;
+	z-index: 10;
+	pointer-events: auto;
+}
+#slide6 .stage-node {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	width: auto;
+	min-width: 34px;
+	height: 34px;
+	padding: 8px 6px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	pointer-events: auto;
+}
+#slide6 .stage-node__dot {
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: rgba(30, 58, 95, 0.28);
+	transition: all 0.3s ease;
+}
+#slide6 .stage-node.is-active .stage-node__dot {
+	background: var(--s6-accent);
+	box-shadow: 0 0 10px rgba(30, 111, 217, 0.55);
+	transform: scale(1.5);
+}
+#slide6 .stage-node__num {
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	color: rgba(30, 58, 95, 0.4);
+	opacity: 0;
+	transform: translateX(-4px);
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease,
+		color 0.3s ease;
+	white-space: nowrap;
+}
+#slide6 .stage-node.is-active .stage-node__num {
+	opacity: 1;
+	transform: translateX(0);
+	color: var(--s6-accent);
+	font-weight: 700;
+}
+#slide6 .stage-line {
+	width: 1px;
+	height: clamp(12px, 2vh, 20px);
+	max-width: none;
+	background: rgba(30, 58, 95, 0.2);
+	margin: 0 0 0 15px;
+}
+
+/* Pastikan slide aktif tidak mendapatkan filter/opacity dari global */
+.slide.is-active#slide6 {
+	filter: none;
+	opacity: 1;
+	background-color: var(--s6-bg-1);
+}
+
+/* ============================================================
+   RESPONSIVE — layar sempit / potret: tumpuk vertikal
+   ============================================================ */
+@media (min-aspect-ratio: 4/3) and (max-width: 1100px) {
+	#slide6 .slide6-stage-area {
+		padding-right: clamp(160px, 22vw, 240px);
+		gap: clamp(20px, 4vw, 48px);
+	}
+	#slide6 .slide6-popup-dock {
+		width: clamp(150px, 16vw, 190px);
+	}
+	#slide6 .slide6-desc {
+		flex-basis: 300px;
+		max-width: 300px;
+	}
+}
+
+@media (max-aspect-ratio: 4/3), (max-width: 700px) {
+	#slide6 .slide6-content {
+		gap: 1.6vh;
+	}
+	#slide6 .slide6-stage-area {
+		flex-direction: column;
+		padding: 0 4vw;
+		gap: 2.2vh;
+		min-height: auto;
+		max-height: none;
+	}
+	#slide6 .slide6-desc {
+		order: 0;
+		flex-basis: auto;
+		max-width: 92%;
+		text-align: center;
+		margin: 0 auto;
+	}
+	#slide6 .slide6-phone {
+		width: clamp(160px, 42vw, 220px);
+	}
+	#slide6 .slide6-phone::before,
+	#slide6 .slide6-phone::after {
+		display: none;
+	}
+	#slide6 .slide6-popup-dock {
+		position: static;
+		transform: none;
+		margin: 8px auto 0;
+		width: min(92vw, 340px);
+		max-width: none;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+	#slide6 .slide6-flow {
+		display: none;
+	}
+	#slide6 .slide6-stages {
+		left: 8px;
+		bottom: calc(3.5vh + 60px);
+	}
+	#slide6 .slide6-chess-board {
+		height: clamp(80px, 14vh, 140px);
+	}
+	#slide6 .slide6-chess-piece {
+		width: calc(20px * var(--s, 1));
+	}
+}
+
+@media (max-width: 640px) {
+	#slide6 .slide6-chess-pieces .slide6-chess-piece:nth-of-type(n + 9) {
+		display: none;
+	}
+	#slide6 .slide6-chess-board {
+		height: clamp(70px, 12vh, 110px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#slide6 .slide6-chess-piece {
+		animation: none;
+	}
+	#slide6 .slide6-float {
+		animation: none;
+	}
+}
+/* ============================================================
+   GESER JUDUL & DESKRIPSI LEBIH KE KIRI
+   Agar tidak tertimpa HP
+   ============================================================ */
+
+#slide6 .slide6-header {
+  align-self: flex-start;
+  text-align: left;
+  margin-left: clamp(20px, 5vw, 80px);
+  margin-right: auto;
+}
+
+#slide6 .slide6-desc {
+  align-self: center;
+  text-align: left;
+  margin-left: clamp(20px, 5vw, 80px);
+  margin-right: auto;
+}

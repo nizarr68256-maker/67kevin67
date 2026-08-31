@@ -1,0 +1,390 @@
+/* ==========================================================
+   CITY UI — STEP 3
+   Menu kiri atas + Presentation Overlay kanan + OPEN
+   ========================================================== */
+
+/* ---------- Reset default button untuk semua UI City ---------- */
+.city-ui button,
+.city-presentation button {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  user-select: none;
+}
+
+.city-ui button:focus-visible,
+.city-presentation button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}
+
+/* ---------- Root Menu ---------- */
+.city-ui {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 220ms ease,
+    visibility 0s linear 220ms;
+}
+
+.city-ui.is-ready {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transition:
+    opacity 220ms ease,
+    visibility 0s linear 0s;
+}
+
+/* ---------- Toggle Button ---------- */
+.city-ui__toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+
+  background: rgba(18, 20, 26, 0.72);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 22px;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.city-ui__toggle:hover {
+  background: rgba(28, 32, 40, 0.85);
+  transform: translateY(-1px);
+}
+
+/* ---------- Panel Daftar ---------- */
+.city-ui__panel {
+  opacity: 0;
+  transform: translateY(-8px);
+  visibility: hidden;
+  pointer-events: none;
+
+  min-width: 210px;
+  background: rgba(16, 18, 24, 0.82);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 0s linear 220ms;
+}
+
+.city-ui.is-open .city-ui__panel {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 0s linear 0s;
+}
+
+/* ---------- List ---------- */
+.city-ui__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.city-ui__list-item {
+  margin: 0;
+}
+
+.city-ui__item {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 9px;
+
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
+
+  font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.city-ui__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* ---------- Presentation Overlay ---------- */
+.city-presentation {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.city-presentation.is-visible {
+  opacity: 1;
+}
+
+.city-presentation__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.18) 35%,
+    rgba(0, 0, 0, 0.55) 65%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  pointer-events: none;
+}
+
+.city-presentation__content {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: min(440px, 40vw);
+  max-width: 90%;
+  padding: 24px 32px 24px 40px;
+  box-sizing: border-box;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: auto;
+  color: #ffffff;
+}
+
+/* Thumbnail */
+.city-presentation__thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.city-presentation.is-opening .city-presentation__thumbnail {
+  transform: scale(var(--thumbnail-target-scale, 1.9));
+  z-index: 90;
+  position: relative;
+  pointer-events: none;
+}
+
+.city-presentation__thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.city-presentation__thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Headline */
+.city-presentation__headline {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Description */
+.city-presentation__description {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Open button */
+.city-presentation__open {
+  align-self: flex-start;
+  min-width: 130px;
+  padding: 12px 20px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-align: center;
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+
+  pointer-events: auto;
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.city-presentation__open:hover {
+  background: rgba(255, 255, 255, 0.20);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.city-presentation__open:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Fade Transition Overlay ---------- */
+.presentation-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 600ms ease,
+    visibility 0s linear 600ms;
+}
+
+.presentation-transition.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transition:
+    opacity 600ms ease,
+    visibility 0s linear 0s;
+}
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .city-ui,
+  .city-ui.is-ready,
+  .city-ui__panel,
+  .city-ui.is-open .city-ui__panel,
+  .city-ui__toggle,
+  .city-ui__item,
+  .city-presentation,
+  .city-presentation__open,
+  .city-presentation__thumbnail,
+  .presentation-transition {
+    transition: none !important;
+  }
+
+  .city-presentation.is-opening .city-presentation__thumbnail {
+    transform: scale(1.05);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .city-ui {
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+  }
+
+  .city-ui__toggle {
+    width: 38px;
+    height: 38px;
+    font-size: 20px;
+    border-radius: 10px;
+  }
+
+  .city-ui__panel {
+    min-width: 180px;
+  }
+
+  .city-ui__item {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .city-presentation__content {
+    width: min(340px, 80vw);
+    padding: 16px 20px 16px 28px;
+    gap: 12px;
+  }
+
+  .city-presentation__thumbnail {
+    border-radius: 8px;
+  }
+
+  .city-presentation__open {
+    min-width: 110px;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
